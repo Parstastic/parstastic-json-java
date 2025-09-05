@@ -3,7 +3,7 @@ package org.parstastic.node;
 /**
  * This class encapsulates all common behavior of different types of <code>JSON</code> nodes.
  */
-public abstract class JsonNode {
+public abstract class JsonNode implements IJsonParticle {
     /**
      * Creates a {@link JsonNode} object.
      */
