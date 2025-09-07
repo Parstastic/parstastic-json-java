@@ -31,7 +31,9 @@ public abstract class JsonNodeWithOuterDelimitersBuilder<T extends JsonNode, E e
      * @param startDelimiter start delimiter of the parsed {@link JsonNode}
      * @param endDelimiter end delimiter of the parsed {@link JsonNode}
      */
-    protected JsonNodeWithOuterDelimitersBuilder(final JsonParser jsonParser, final char startDelimiter, final char endDelimiter) {
+    protected JsonNodeWithOuterDelimitersBuilder(final JsonParser jsonParser,
+                                                 final char startDelimiter,
+                                                 final char endDelimiter) {
         super(jsonParser);
         this.startDelimiter = startDelimiter;
         this.endDelimiter = endDelimiter;
