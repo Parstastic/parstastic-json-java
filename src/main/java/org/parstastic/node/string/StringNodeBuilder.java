@@ -12,7 +12,7 @@ import java.util.function.BiPredicate;
 import java.util.stream.Collectors;
 
 /**
- * This class is responsible for parsing <code>JSON</code> strings into {@link StringNode} objects
+ * This class is responsible for parsing <code>JSON</code> strings into {@link StringNode} objects.
  */
 public class StringNodeBuilder extends JsonNodeWithOuterDelimitersBuilder<StringNode, InvalidJsonStringNodeException> {
     /**
