@@ -1,0 +1,91 @@
+package org.parstastic.jparstastic_json.node.builders;
+
+import org.parstastic.jparstastic_json.node.JsonNode;
+import org.parstastic.jparstastic_json.parser.JsonParser;
+import org.parstastic.jparstastic_json.parser.exceptions.InvalidJsonException;
+
+import java.util.Optional;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
+
+/**
+ * This abstract class unifies behavior that is common to other {@link JsonNodeBuilder} classes
+ * that build {@link JsonNode} objects which always match a full text.
+ *
+ * @param <T> type of the parsed {@link JsonNode} object
+ * @param <E> type of {@link InvalidJsonException} that can be thrown during parsing
+ * @param <O> type of the matched text
+ */
+public abstract class JsonNodeFullTextMatchingBuilder<T extends JsonNode, E extends InvalidJsonException, O> extends JsonNodeBuilder<T, E> {
+    /**
+     * {@link Set} of possible values the {@link JsonNode} can consist of.
+     */
+    private final Set<O> possibleValues;
+
+    /**
+     * Creates a {@link JsonNodeFullTextMatchingBuilder} object with given {@link JsonParser} and a {@link Set} of possible values.
+     *
+     * @param jsonParser {@link JsonParser} that can be invoked for parsing
+     * @param possibleValues {@link Set} of possible values
+     */
+    protected JsonNodeFullTextMatchingBuilder(final JsonParser jsonParser, final Set<O> possibleValues) {
+        super(jsonParser);
+        this.possibleValues = possibleValues;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>
+     * This {@link JsonNodeFullTextMatchingBuilder} can parse a <code>JSON</code> {@link String}
+     * if it starts with any of {@link #possibleValues}.
+     * </p>
+     */
+    @Override
+    public boolean canParseJson(final String json, final AtomicInteger index) {
+        return index.get() < json.length() && getMatchingValue(json, index).isPresent();
+    }
+
+    /**
+     * Returns an {@link Optional} of the element of {@link #possibleValues} with which the <code>JSON</code> {@link String} starts.
+     *
+     * @param json <code>JSON</code> {@link String} to get matching value for
+     * @param index the index to start matching at
+     * @return an {@link Optional} of the matching element of {@link #possibleValues} if there is one,
+     *         an empty {@link Optional} otherwise
+     */
+    protected Optional<O> getMatchingValue(final String json, final AtomicInteger index) {
+        return this.possibleValues.stream()
+                .filter(fullTextObject -> json.startsWith(fullTextObject.toString(), index.get()))
+                .findFirst();
+    }
+
+    @Override
+    public T parseJson(final String json, final AtomicInteger index) throws E {
+        final Optional<O> valueOptional = getMatchingValue(json, index);
+        if (valueOptional.isEmpty()) {
+            throw createException();
+        }
+
+        final O value = valueOptional.get();
+        for (int i = 0; i < value.toString().length(); i++) {
+            index.incrementAndGet();
+        }
+        return createNode(value);
+    }
+
+    /**
+     * Creates a {@link JsonNode} object with given {@code value}.
+     *
+     * @param value the value to create the {@link JsonNode} object with
+     * @return a {@link JsonNode} object with given {@code value}
+     */
+    protected abstract T createNode(final O value);
+
+    /**
+     * Creates an {@link InvalidJsonException} object corresponding to the {@link JsonNode} type to create.
+     *
+     * @return an {@link InvalidJsonException} object
+     */
+    protected abstract E createException();
+}
