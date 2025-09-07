@@ -1,6 +1,6 @@
 package org.parstastic.node.object;
 
-import org.parstastic.node.IJsonParticle;
+import org.parstastic.node.JsonParticle;
 import org.parstastic.node.JsonNode;
 import org.parstastic.node.string.StringNode;
 
@@ -15,7 +15,7 @@ public class ObjectNode extends JsonNode {
      * This class represents a <code>JSON</code> object node's property.
      * It is a key-value pair.
      */
-    public static class ObjectNodeProperty implements IJsonParticle {
+    public static class ObjectNodeProperty extends JsonParticle {
         /**
          * This is the delimiter used before and after the key of every {@link ObjectNodeProperty}.
          *
@@ -42,7 +42,7 @@ public class ObjectNode extends JsonNode {
         }
 
         @Override
-        public String toString() {
+        public String stringify() {
             return DELIMITER_KEY + key + DELIMITER_KEY + DELIMITER + value.toString();
         }
     }

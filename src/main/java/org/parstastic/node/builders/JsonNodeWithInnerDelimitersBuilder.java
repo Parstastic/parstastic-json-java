@@ -1,6 +1,6 @@
 package org.parstastic.node.builders;
 
-import org.parstastic.node.IJsonParticle;
+import org.parstastic.node.JsonParticle;
 import org.parstastic.node.JsonNode;
 import org.parstastic.parser.IJsonParser;
 import org.parstastic.parser.JsonParser;
@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @param <E> type of {@link InvalidJsonException} that can be thrown during parsing
  * @param <P> type of the elements
  */
-public abstract class JsonNodeWithInnerDelimitersBuilder<T extends JsonNode, E extends InvalidJsonException, P extends IJsonParticle> extends JsonNodeWithOuterDelimitersBuilder<T, E> {
+public abstract class JsonNodeWithInnerDelimitersBuilder<T extends JsonNode, E extends InvalidJsonException, P extends JsonParticle> extends JsonNodeWithOuterDelimitersBuilder<T, E> {
     /**
      * Character that signals the next element.
      */
