@@ -41,6 +41,7 @@ public abstract class JsonNodeFullTextMatchingBuilder<T extends JsonNode, E exte
      */
     @Override
     public boolean canParseJson(final JsonParsingProcess parsingProcess) {
+        skipWhitespaces(parsingProcess);
         return parsingProcess.isIndexInJson() && getMatchingValue(parsingProcess).isPresent();
     }
 
