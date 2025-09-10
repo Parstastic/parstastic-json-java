@@ -1,14 +1,14 @@
 package org.parstastic.jparstastic_json.node.builders;
 
-import org.parstastic.jparstastic_json.node.JsonParticle;
 import org.parstastic.jparstastic_json.node.JsonNode;
+import org.parstastic.jparstastic_json.node.JsonParticle;
 import org.parstastic.jparstastic_json.parser.IJsonParser;
 import org.parstastic.jparstastic_json.parser.JsonParser;
+import org.parstastic.jparstastic_json.parser.JsonParsingProcess;
 import org.parstastic.jparstastic_json.parser.exceptions.InvalidJsonException;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * This abstract class unifies behavior that is common to other {@link JsonNodeBuilder} classes
@@ -60,10 +60,10 @@ public abstract class JsonNodeWithInnerDelimitersBuilder<T extends JsonNode, E e
      * @throws E when any problem occurs during processing of character
      */
     @Override
-    protected boolean processChar(final String json, final AtomicInteger index) throws E {
-        this.jsonParser.skipWhitespaces(json, index);
+    protected boolean processChar(final JsonParsingProcess parsingProcess) throws E {
+        this.jsonParser.skipWhitespaces(parsingProcess);
 
-        return super.processChar(json, index);
+        return super.processChar(parsingProcess);
     }
 
     /**
@@ -75,15 +75,15 @@ public abstract class JsonNodeWithInnerDelimitersBuilder<T extends JsonNode, E e
      * @throws E when any problem occurs during processing of character
      */
     @Override
-    protected boolean processChar(final String json, final AtomicInteger index, final char c) throws E {
-        if (isAtEndDelimiter(json, index)) {
+    protected boolean processChar(final JsonParsingProcess parsingProcess, final char c) throws E {
+        if (isAtEndDelimiter(parsingProcess)) {
             return false;
         }
 
-        final P element = this.elementParser.parseJson(json, index);
+        final P element = this.elementParser.parseJson(parsingProcess);
         this.elements.add(element);
 
-        this.jsonParser.skipWhitespaces(json, index);
-        return !isAtEndDelimiter(json, index);
+        this.jsonParser.skipWhitespaces(parsingProcess);
+        return !isAtEndDelimiter(parsingProcess);
     }
 }

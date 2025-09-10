@@ -5,10 +5,9 @@ import org.parstastic.jparstastic_json.node.builders.JsonNodeWithInnerDelimiters
 import org.parstastic.jparstastic_json.node.string.StringNodeBuilder;
 import org.parstastic.jparstastic_json.parser.IJsonParser;
 import org.parstastic.jparstastic_json.parser.JsonParser;
+import org.parstastic.jparstastic_json.parser.JsonParsingProcess;
 import org.parstastic.jparstastic_json.parser.exceptions.InvalidJsonException;
 import org.parstastic.jparstastic_json.parser.exceptions.InvalidJsonObjectNodeException;
-
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.parstastic.jparstastic_json.node.object.ObjectNode.ObjectNodeProperty;
 
@@ -24,12 +23,12 @@ public class ObjectNodeBuilder extends JsonNodeWithInnerDelimitersBuilder<Object
      */
     private record ObjectNodePropertyBuilder(JsonParser jsonParser) implements IJsonParser<ObjectNodeProperty, InvalidJsonException> {
         @Override
-        public ObjectNodeProperty parseJson(final String json, final AtomicInteger index) throws InvalidJsonException {
-            final String key = parseKey(json, index);
+        public ObjectNodeProperty parseJson(final JsonParsingProcess parsingProcess) throws InvalidJsonException {
+            final String key = parseKey(parsingProcess);
 
-            validateDelimiter(json, index);
+            validateDelimiter(parsingProcess);
 
-            final JsonNode value = parseValue(json, index);
+            final JsonNode value = parseValue(parsingProcess);
 
             return new ObjectNodeProperty(key, value);
         }
@@ -38,15 +37,14 @@ public class ObjectNodeBuilder extends JsonNodeWithInnerDelimitersBuilder<Object
          * Parses a <code>JSON</code> {@link String} into the key of an {@link ObjectNodeProperty}.
          * Skips whitespaces before and after.
          *
-         * @param json <code>JSON</code> {@link String} to parse
-         * @param index the index at which to start parsing
+         * @param parsingProcess a <code>JSON</code> {@link String} parsing process
          * @return {@link String} which is the key
          * @throws InvalidJsonException when any problem occurs during parsing
          */
-        private String parseKey(final String json, final AtomicInteger index) throws InvalidJsonException {
-            this.jsonParser.skipWhitespaces(json, index);
-            final String key = new StringNodeBuilder(this.jsonParser).parseJson(json, index).getValue();
-            this.jsonParser.skipWhitespaces(json, index);
+        private String parseKey(final JsonParsingProcess parsingProcess) throws InvalidJsonException {
+            this.jsonParser.skipWhitespaces(parsingProcess);
+            final String key = new StringNodeBuilder(this.jsonParser).parseJson(parsingProcess).getValue();
+            this.jsonParser.skipWhitespaces(parsingProcess);
 
             return key;
         }
@@ -55,13 +53,12 @@ public class ObjectNodeBuilder extends JsonNodeWithInnerDelimitersBuilder<Object
          * Validates the {@link ObjectNodeProperty#DELIMITER} at the given index of <code>JSON</code> {@link String}.
          * After successful validation, increments {@code index}.
          *
-         * @param json <code>JSON</code> {@link String} to validate
-         * @param index the index at which the delimiter should be
+         * @param parsingProcess a <code>JSON</code> {@link String} parsing process
          * @throws InvalidJsonException when the delimiter is not found
          */
-        private void validateDelimiter(final String json, final AtomicInteger index) throws InvalidJsonException {
-            if (this.jsonParser.hasCharAtIndex(json, index, ObjectNodeProperty.DELIMITER)) {
-                index.incrementAndGet();
+        private void validateDelimiter(final JsonParsingProcess parsingProcess) throws InvalidJsonException {
+            if (parsingProcess.isAtChar(ObjectNodeProperty.DELIMITER)) {
+                parsingProcess.incrementIndex();
             } else {
                 throw new InvalidJsonException();
             }
@@ -71,15 +68,14 @@ public class ObjectNodeBuilder extends JsonNodeWithInnerDelimitersBuilder<Object
          * Parses a <code>JSON</code> {@link String} into the value of an {@link ObjectNodeProperty}.
          * Skips whitespaces before and after.
          *
-         * @param json <code>JSON</code> {@link String} to parse
-         * @param index the index at which to start parsing
+         * @param parsingProcess a <code>JSON</code> {@link String} parsing process
          * @return {@link JsonNode} which is the value
          * @throws InvalidJsonException when any problem occurs during parsing
          */
-        private JsonNode parseValue(final String json, final AtomicInteger index) throws InvalidJsonException {
-            this.jsonParser.skipWhitespaces(json, index);
-            final JsonNode value = this.jsonParser.parseJson(json, index);
-            this.jsonParser.skipWhitespaces(json, index);
+        private JsonNode parseValue(final JsonParsingProcess parsingProcess) throws InvalidJsonException {
+            this.jsonParser.skipWhitespaces(parsingProcess);
+            final JsonNode value = this.jsonParser.parseJson(parsingProcess);
+            this.jsonParser.skipWhitespaces(parsingProcess);
 
             return value;
         }

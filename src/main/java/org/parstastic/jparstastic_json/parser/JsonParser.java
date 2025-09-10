@@ -8,7 +8,6 @@ import org.reflections.Reflections;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Objects;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 /**
@@ -48,14 +47,14 @@ public class JsonParser implements IJsonParser<JsonNode, InvalidJsonException> {
      * @param json <code>JSON</code> {@link String} to parse
      * @return parsed {@link JsonNode} object
      * @throws InvalidJsonException when any problem occurs during parsing
-     * @see #parseJson(String, AtomicInteger)
+     * @see #parseJson(JsonParsingProcess)
      */
     public JsonNode parseJson(final String json) throws InvalidJsonException {
-        final AtomicInteger index = new AtomicInteger(0);
-        final JsonNode node = parseJson(json, index);
+        final JsonParsingProcess parsingProcess = new JsonParsingProcess(json);
+        final JsonNode node = parseJson(parsingProcess);
 
-        skipWhitespaces(json, index);
-        if (index.get() != json.length()) {
+        skipWhitespaces(parsingProcess);
+        if (!parsingProcess.isFinished()) {
             throw new InvalidJsonException();
         }
 
@@ -65,19 +64,17 @@ public class JsonParser implements IJsonParser<JsonNode, InvalidJsonException> {
     /**
      * Parses a <code>JSON</code> {@link String} fully and returns a parsed {@link JsonNode} object.
      *
-     * @param json <code>JSON</code> {@link String} to parse
-     * @param index the index to start parsing from
      * @return parsed {@link JsonNode} object
      * @throws InvalidJsonException when any problem occurs during parsing
      */
     @Override
-    public JsonNode parseJson(final String json, final AtomicInteger index) throws InvalidJsonException {
-        skipWhitespaces(json, index);
+    public JsonNode parseJson(final JsonParsingProcess parsingProcess) throws InvalidJsonException {
+        skipWhitespaces(parsingProcess);
 
-        final JsonNodeBuilder<?, ?> jsonNodeBuilder = createJsonNodeBuilder(json, index);
+        final JsonNodeBuilder<?, ?> jsonNodeBuilder = createJsonNodeBuilder(parsingProcess);
 
         if (jsonNodeBuilder != null) {
-            return jsonNodeBuilder.parseJson(json, index);
+            return jsonNodeBuilder.parseJson(parsingProcess);
         } else {
             throw new InvalidJsonException();
         }
@@ -86,37 +83,34 @@ public class JsonParser implements IJsonParser<JsonNode, InvalidJsonException> {
     /**
      * Skips all whitespace characters, as defined by {@link #ALLOWED_WHITESPACES}, at the start of the <code>JSON</code> {@link String}.
      *
-     * @param json <code>JSON</code> {@link String} to skip whitespaces in
-     * @param index the index to start skipping from
+     * @param parsingProcess a <code>JSON</code> {@link String} parsing process to skip whitespaces in
      */
-    public void skipWhitespaces(final String json, final AtomicInteger index) {
-        while (startsWithWhitespace(json, index)) {
-            index.getAndIncrement();
+    public void skipWhitespaces(final JsonParsingProcess parsingProcess) {
+        while (startsWithWhitespace(parsingProcess)) {
+            parsingProcess.incrementIndex();
         }
     }
 
     /**
      * Determines whether a <code>JSON</code> {@link String} starts with a whitespace character.
      *
-     * @param json <code>JSON</code> {@link String} to check for whitespace
-     * @param index the index at which to check for whitespace
+     * @param parsingProcess a <code>JSON</code> {@link String} parsing process to check for whitespace
      * @return {@code true} if the <code>JSON</code> {@link String} starts with a whitespace character,
      *         {@code false} otherwise
      */
-    public boolean startsWithWhitespace(final String json, final AtomicInteger index) {
-        return index.get() < json.length() && ALLOWED_WHITESPACES.contains(json.charAt(index.get()));
+    public boolean startsWithWhitespace(final JsonParsingProcess parsingProcess) {
+        return parsingProcess.isCharValid(ALLOWED_WHITESPACES::contains);
     }
 
     /**
      * Creates a {@link JsonNodeBuilder} for a <code>JSON</code> {@link String}.
      *
-     * @param json <code>JSON</code> {@link String} to create {@link JsonNodeBuilder} for
-     * @param index the index with which to determine the correct {@link JsonNodeBuilder}
+     * @param parsingProcess a <code>JSON</code> {@link String} parsing process to create {@link JsonNodeBuilder} for
      * @return {@link JsonNodeBuilder} object able to parse the given <code>JSON</code> {@link String} or {@code null} if there is none
      */
-    private JsonNodeBuilder<?, ?> createJsonNodeBuilder(final String json, final AtomicInteger index) {
+    private JsonNodeBuilder<?, ?> createJsonNodeBuilder(final JsonParsingProcess parsingProcess) {
         return createJsonNodeBuilders().stream()
-                .filter(builder -> builder.canParseJson(json, index))
+                .filter(builder -> builder.canParseJson(parsingProcess))
                 .findFirst().orElse(null);
     }
 
@@ -150,22 +144,5 @@ public class JsonParser implements IJsonParser<JsonNode, InvalidJsonException> {
         } catch (final NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
             return null;
         }
-    }
-
-    /**
-     * Checks whether a given <code>JSON</code> {@link String} has a given character at a given index.
-     *
-     * @param json <code>JSON</code> {@link String} to check character presence in
-     * @param index the index to check character presence for
-     * @param c the character to check presence for
-     * @return {@code true} if the given <code>JSON</code> {@link String} has the given character {@code c} at the given index,
-     *         {@code false} if the index is outside the <code>JSON</code> {@link String} length or the character at the index is not {@code c}
-     */
-    public boolean hasCharAtIndex(final String json, final AtomicInteger index, final char c) {
-        final int i = index.get();
-        if (i < json.length()) {
-            return json.charAt(i) == c;
-        }
-        return false;
     }
 }

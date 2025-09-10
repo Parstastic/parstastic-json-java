@@ -2,11 +2,11 @@ package org.parstastic.jparstastic_json.node.builders;
 
 import org.parstastic.jparstastic_json.node.JsonNode;
 import org.parstastic.jparstastic_json.parser.JsonParser;
+import org.parstastic.jparstastic_json.parser.JsonParsingProcess;
 import org.parstastic.jparstastic_json.parser.exceptions.InvalidJsonException;
 
 import java.util.Optional;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * This abstract class unifies behavior that is common to other {@link JsonNodeBuilder} classes
@@ -42,34 +42,33 @@ public abstract class JsonNodeFullTextMatchingBuilder<T extends JsonNode, E exte
      * </p>
      */
     @Override
-    public boolean canParseJson(final String json, final AtomicInteger index) {
-        return index.get() < json.length() && getMatchingValue(json, index).isPresent();
+    public boolean canParseJson(final JsonParsingProcess parsingProcess) {
+        return parsingProcess.isIndexInJson() && getMatchingValue(parsingProcess).isPresent();
     }
 
     /**
      * Returns an {@link Optional} of the element of {@link #possibleValues} with which the <code>JSON</code> {@link String} starts.
      *
-     * @param json <code>JSON</code> {@link String} to get matching value for
-     * @param index the index to start matching at
+     * @param parsingProcess a <code>JSON</code> {@link String} parsing process to get matching value for
      * @return an {@link Optional} of the matching element of {@link #possibleValues} if there is one,
      *         an empty {@link Optional} otherwise
      */
-    protected Optional<O> getMatchingValue(final String json, final AtomicInteger index) {
+    protected Optional<O> getMatchingValue(final JsonParsingProcess parsingProcess) {
         return this.possibleValues.stream()
-                .filter(fullTextObject -> json.startsWith(fullTextObject.toString(), index.get()))
+                .filter(fullTextObject -> parsingProcess.startsWith(fullTextObject.toString()))
                 .findFirst();
     }
 
     @Override
-    public T parseJson(final String json, final AtomicInteger index) throws E {
-        final Optional<O> valueOptional = getMatchingValue(json, index);
+    public T parseJson(final JsonParsingProcess parsingProcess) throws E {
+        final Optional<O> valueOptional = getMatchingValue(parsingProcess);
         if (valueOptional.isEmpty()) {
             throw createException();
         }
 
         final O value = valueOptional.get();
         for (int i = 0; i < value.toString().length(); i++) {
-            index.incrementAndGet();
+            parsingProcess.incrementIndex();
         }
         return createNode(value);
     }

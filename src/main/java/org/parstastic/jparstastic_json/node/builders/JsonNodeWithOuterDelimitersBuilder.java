@@ -2,10 +2,10 @@ package org.parstastic.jparstastic_json.node.builders;
 
 import org.parstastic.jparstastic_json.node.JsonNode;
 import org.parstastic.jparstastic_json.parser.JsonParser;
+import org.parstastic.jparstastic_json.parser.JsonParsingProcess;
 import org.parstastic.jparstastic_json.parser.exceptions.InvalidJsonException;
 
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.BiPredicate;
+import java.util.function.Predicate;
 
 /**
  * This abstract class unifies behavior that is common to other {@link JsonNodeBuilder} classes
@@ -48,43 +48,41 @@ public abstract class JsonNodeWithOuterDelimitersBuilder<T extends JsonNode, E e
      * </p>
      */
     @Override
-    public boolean canParseJson(final String json, final AtomicInteger index) {
-        return isAtStartDelimiter(json, index);
+    public boolean canParseJson(final JsonParsingProcess parsingProcess) {
+        return isAtStartDelimiter(parsingProcess);
     }
 
     /**
      * Determines whether a <code>JSON</code> {@link String} is at the start delimiter required for starting the parsing process.
      *
-     * @param json <code>JSON</code> {@link String} to check for start delimiter.
-     * @param index the index for which to check start delimiter presence
+     * @param parsingProcess a <code>JSON</code> {@link String} parsing process to check for start delimiter
      * @return {@code true} if the character at {@code index} in the given <code>JSON</code> {@link String} is {@link #startDelimiter},
      *         {@code false} otherwise
      * @see #startDelimiter
      */
-    protected boolean isAtStartDelimiter(final String json, final AtomicInteger index) {
-        return this.jsonParser.hasCharAtIndex(json, index, this.startDelimiter);
+    protected boolean isAtStartDelimiter(final JsonParsingProcess parsingProcess) {
+        return parsingProcess.isAtChar(this.startDelimiter);
     }
 
     /**
      * Determines whether a <code>JSON</code> {@link String} is at the end delimiter required for ending the parsing process.
      *
-     * @param json <code>JSON</code> {@link String} to check for end delimiter
-     * @param index the index for which to check end delimiter presence
+     * @param parsingProcess a <code>JSON</code> {@link String} parsing process to check for end delimiter
      * @return {@code true} if the character at {@code index} in the given <code>JSON</code> {@link String} is {@link #endDelimiter},
      *         {@code false} otherwise
      * @see #endDelimiter
      */
-    protected boolean isAtEndDelimiter(final String json, final AtomicInteger index) {
-        return this.jsonParser.hasCharAtIndex(json, index, this.endDelimiter);
+    protected boolean isAtEndDelimiter(final JsonParsingProcess parsingProcess) {
+        return parsingProcess.isAtChar(this.endDelimiter);
     }
 
     @Override
-    public T parseJson(final String json, final AtomicInteger index) throws E {
-        validateStartDelimiter(json, index);
+    public T parseJson(final JsonParsingProcess parsingProcess) throws E {
+        validateStartDelimiter(parsingProcess);
 
-        iterateChars(json, index);
+        iterateChars(parsingProcess);
 
-        validateEndDelimiter(json, index);
+        validateEndDelimiter(parsingProcess);
 
         return createNode();
     }
@@ -92,25 +90,23 @@ public abstract class JsonNodeWithOuterDelimitersBuilder<T extends JsonNode, E e
     /**
      * Validates if a <code>JSON</code> {@link String} has {@link #startDelimiter} at {@code index} or throws an exception otherwise.
      *
-     * @param json <code>JSON</code> {@link String} to validate {@link #startDelimiter} for
-     * @param index the index at which {@link #startDelimiter} has to be
+     * @param parsingProcess a <code>JSON</code> {@link String} parsing process to validate {@link #startDelimiter} for
      * @throws E if {@link #startDelimiter} is not at {@code index} of <code>JSON</code> {@link String}
-     * @see #isAtStartDelimiter(String, AtomicInteger)
+     * @see #isAtStartDelimiter(JsonParsingProcess)
      */
-    protected void validateStartDelimiter(final String json, final AtomicInteger index) throws E {
-        validateDelimiter(json, index, this::isAtStartDelimiter);
+    protected void validateStartDelimiter(final JsonParsingProcess parsingProcess) throws E {
+        validateDelimiter(parsingProcess, this::isAtStartDelimiter);
     }
 
     /**
      * Validates if a <code>JSON</code> {@link String} has {@link #endDelimiter} at {@code index} or throws an exception otherwise.
      *
-     * @param json <code>JSON</code> {@link String} to validate {@link #endDelimiter} for
-     * @param index the index at which {@link #endDelimiter} has to be
+     * @param parsingProcess a <code>JSON</code> {@link String} parsing process to validate {@link #endDelimiter} for
      * @throws E if {@link #endDelimiter} is not at {@code index} of <code>JSON</code> {@link String}
-     * @see #isAtEndDelimiter(String, AtomicInteger)
+     * @see #isAtEndDelimiter(JsonParsingProcess)
      */
-    protected void validateEndDelimiter(final String json, final AtomicInteger index) throws E {
-        validateDelimiter(json, index, this::isAtEndDelimiter);
+    protected void validateEndDelimiter(final JsonParsingProcess parsingProcess) throws E {
+        validateDelimiter(parsingProcess, this::isAtEndDelimiter);
     }
 
     /**
@@ -118,54 +114,50 @@ public abstract class JsonNodeWithOuterDelimitersBuilder<T extends JsonNode, E e
      * If that {@code validationFunction} returns {@code false}, an exception is thrown.
      * Otherwise, the {@code index} is increased by one.
      *
-     * @param json <code>JSON</code> {@link String} to validate a delimiter for
-     * @param index the index at which a delimiter has to be
-     * @param validationFunction {@link BiPredicate} to validate delimiter presence with
+     * @param parsingProcess a <code>JSON</code> {@link String} parsing process to validate a delimiter for
+     * @param validationFunction {@link Predicate} to validate delimiter presence with
      * @throws E when the delimiter is not at {@code index} in <code>JSON</code> {@link String}
      */
-    protected void validateDelimiter(final String json,
-                                     final AtomicInteger index,
-                                     final BiPredicate<String, AtomicInteger> validationFunction) throws E {
-        if (!validationFunction.test(json, index)) {
+    protected void validateDelimiter(final JsonParsingProcess parsingProcess,
+                                     final Predicate<JsonParsingProcess> validationFunction) throws E {
+        if (!validationFunction.test(parsingProcess)) {
             throw createException();
         }
-        index.incrementAndGet();
+        parsingProcess.incrementIndex();
     }
 
     /**
      * Iterates over all remaining characters in <code>JSON</code> {@link String} or until the {@link #endDelimiter} is reached.
      *
-     * @param json <code>JSON</code> {@link String} to iterate over
-     * @param index the index to start the iteration from
+     * @param parsingProcess a <code>JSON</code> {@link String} parsing process to iterate over
      * @throws E when any problem occurs during iterating over, reading or processing characters
      */
-    protected void iterateChars(final String json, final AtomicInteger index) throws E {
-        while (index.get() < json.length()) {
-            if (!processChar(json, index)) {
+    protected void iterateChars(final JsonParsingProcess parsingProcess) throws E {
+        while (parsingProcess.isIndexInJson()) {
+            if (!processChar(parsingProcess)) {
                 return;
             }
         }
     }
 
     /**
-     * Represents one iteration of {@link #iterateChars(String, AtomicInteger)}.
+     * Represents one iteration of {@link #iterateChars(JsonParsingProcess)}.
      * Determines whether the iteration should be continued or not.
      * Processes the character at {@code index} in <code>JSON</code> {@link String} and increments the {@code index}.
-     * 
-     * @param json <code>JSON</code> {@link String} that is parsed
-     * @param index the index of the character to process
+     *
+     * @param parsingProcess a <code>JSON</code> {@link String} parsing process
      * @return {@code true} if the iteration should continue,
      *         {@code false} otherwise
      * @throws E when any problem occurs during processing of character
      */
-    protected boolean processChar(final String json, final AtomicInteger index) throws E {
-        final char c = json.charAt(index.get());
+    protected boolean processChar(final JsonParsingProcess parsingProcess) throws E {
+        final char c = parsingProcess.getChar();
 
-        if (!processChar(json, index, c)) {
+        if (!processChar(parsingProcess, c)) {
             return false;
         }
 
-        index.incrementAndGet();
+        parsingProcess.incrementIndex();
 
         return true;
     }
@@ -173,14 +165,13 @@ public abstract class JsonNodeWithOuterDelimitersBuilder<T extends JsonNode, E e
     /**
      * Processes the character at {@code index} in <code>JSON</code> {@link String}.
      *
-     * @param json <code>JSON</code> {@link String} that is parsed
-     * @param index the index of the character to process
+     * @param parsingProcess a <code>JSON</code> {@link String} parsing process
      * @param c the character to process
      * @return {@code true} if the iteration should continue,
      *         {@code false} otherwise
      * @throws E when any problem occurs during processing of character
      */
-    protected abstract boolean processChar(final String json, final AtomicInteger index, final char c) throws E;
+    protected abstract boolean processChar(final JsonParsingProcess parsingProcess, final char c) throws E;
 
     /**
      * Creates a {@link JsonNode} object with previously specified parameters.

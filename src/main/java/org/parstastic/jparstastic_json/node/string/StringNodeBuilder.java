@@ -2,13 +2,13 @@ package org.parstastic.jparstastic_json.node.string;
 
 import org.parstastic.jparstastic_json.node.builders.JsonNodeWithOuterDelimitersBuilder;
 import org.parstastic.jparstastic_json.parser.JsonParser;
+import org.parstastic.jparstastic_json.parser.JsonParsingProcess;
 import org.parstastic.jparstastic_json.parser.exceptions.InvalidJsonStringNodeException;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.BiPredicate;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -23,15 +23,16 @@ public class StringNodeBuilder extends JsonNodeWithOuterDelimitersBuilder<String
     /**
      * Function used to validate a single escaped character.
      */
-    private static final BiPredicate<String, AtomicInteger> SINGLE_ESCAPE_TARGET_VALIDATION_FUNCTION = (json, index) -> true;
+    private static final Predicate<JsonParsingProcess> SINGLE_ESCAPE_TARGET_VALIDATION_FUNCTION = parsingProcess -> true;
 
     /**
      * Function to validate an escaped unicode sequence.
      */
-    private static final BiPredicate<String, AtomicInteger> UNICODE_VALIDATION_FUNCTION = (json, index)  -> {
+    private static final Predicate<JsonParsingProcess> UNICODE_VALIDATION_FUNCTION = parsingProcess -> {
+        final Predicate<Character> validationFunction = c -> Character.digit(c, 16) == -1;
         for (int i = 0; i < 4; i++) {
-            final int newIndex = index.incrementAndGet();
-            if (newIndex >= json.length() || Character.digit(json.charAt(newIndex), 16) == -1) {
+            parsingProcess.incrementIndex();
+            if (!parsingProcess.isCharValid(validationFunction)) {
                 return false;
             }
         }
@@ -41,7 +42,7 @@ public class StringNodeBuilder extends JsonNodeWithOuterDelimitersBuilder<String
     /**
      * All targets that can be escaped by {@link #ESCAPE_CHARACTER} and a function per target to validate it.
      */
-    public static final Map<Character, BiPredicate<String, AtomicInteger>> ESCAPE_TARGETS_WITH_VALIDATION_FUNCTION = Map.of(
+    public static final Map<Character, Predicate<JsonParsingProcess>> ESCAPE_TARGETS_WITH_VALIDATION_FUNCTION = Map.of(
             '"', SINGLE_ESCAPE_TARGET_VALIDATION_FUNCTION,
             '\\', SINGLE_ESCAPE_TARGET_VALIDATION_FUNCTION,
             '/', SINGLE_ESCAPE_TARGET_VALIDATION_FUNCTION,
@@ -83,8 +84,8 @@ public class StringNodeBuilder extends JsonNodeWithOuterDelimitersBuilder<String
      *         {@code false} otherwise
      */
     @Override
-    protected boolean isAtEndDelimiter(final String json, final AtomicInteger index) {
-        return !this.isEscaped && super.isAtEndDelimiter(json, index);
+    protected boolean isAtEndDelimiter(final JsonParsingProcess parsingProcess) {
+        return !this.isEscaped && super.isAtEndDelimiter(parsingProcess);
     }
 
     /**
@@ -96,7 +97,7 @@ public class StringNodeBuilder extends JsonNodeWithOuterDelimitersBuilder<String
      * @throws InvalidJsonStringNodeException when any invalid character is found
      */
     @Override
-    protected boolean processChar(final String json, final AtomicInteger index, final char c) throws InvalidJsonStringNodeException {
+    protected boolean processChar(final JsonParsingProcess parsingProcess, final char c) throws InvalidJsonStringNodeException {
         if (!this.isEscaped) {
             if (c == ESCAPE_CHARACTER) {
                 this.isEscaped = true;
@@ -107,7 +108,7 @@ public class StringNodeBuilder extends JsonNodeWithOuterDelimitersBuilder<String
             }
         } else {
             this.isEscaped = false;
-            if (isValidEscapeTarget(json, index, c)) {
+            if (isValidEscapeTarget(parsingProcess, c)) {
                 this.chars.add(c);
             } else {
                 throw createException();
@@ -120,14 +121,13 @@ public class StringNodeBuilder extends JsonNodeWithOuterDelimitersBuilder<String
     /**
      * Checks whether a character is a valid target for escaping with {@link #ESCAPE_CHARACTER}.
      *
-     * @param json <code>JSON</code> {@link String} in which the character is escaped
-     * @param index the index of the escaped character
+     * @param parsingProcess a <code>JSON</code> {@link String} parsing process in which the character is escaped
      * @param c the escaped character
      * @return {@code true} if the escaped character is a valid target,
      *         {@code false} otherwise
      */
-    private boolean isValidEscapeTarget(final String json, final AtomicInteger index, final char c) {
-        return ESCAPE_TARGETS_WITH_VALIDATION_FUNCTION.getOrDefault(c, (j, i) -> false).test(json, index);
+    private boolean isValidEscapeTarget(final JsonParsingProcess parsingProcess, final char c) {
+        return ESCAPE_TARGETS_WITH_VALIDATION_FUNCTION.getOrDefault(c, p -> false).test(parsingProcess);
     }
 
     /**

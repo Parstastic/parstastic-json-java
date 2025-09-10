@@ -3,8 +3,6 @@ package org.parstastic.jparstastic_json.parser;
 import org.parstastic.jparstastic_json.node.JsonParticle;
 import org.parstastic.jparstastic_json.parser.exceptions.InvalidJsonException;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 /**
  * This interface represents anything that can parse a <code>JSON</code> {@link String} partially or fully.
  *
@@ -14,12 +12,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 public interface IJsonParser<T extends JsonParticle, E extends InvalidJsonException> {
     /**
      * Parses a <code>JSON</code> {@link String} partially or fully and returns a parsed object.
-     * The {@code index} may be modified.
      *
-     * @param json <code>JSON</code> {@link String} to parse
-     * @param index the index to start parsing from
+     * @param parsingProcess a <code>JSON</code> {@link String} parsing process
      * @return parsed {@link JsonParticle} object of type {@code T}
      * @throws E when any problem occurs during parsing
      */
-    T parseJson(final String json, final AtomicInteger index) throws E;
+    T parseJson(final JsonParsingProcess parsingProcess) throws E;
 }

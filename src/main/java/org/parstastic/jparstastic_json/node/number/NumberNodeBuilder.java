@@ -2,11 +2,11 @@ package org.parstastic.jparstastic_json.node.number;
 
 import org.parstastic.jparstastic_json.node.builders.JsonNodeBuilder;
 import org.parstastic.jparstastic_json.parser.JsonParser;
+import org.parstastic.jparstastic_json.parser.JsonParsingProcess;
 import org.parstastic.jparstastic_json.parser.exceptions.InvalidJsonNumberNodeException;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 /**
@@ -40,21 +40,17 @@ public class NumberNodeBuilder extends JsonNodeBuilder<NumberNode, InvalidJsonNu
      * if index is within <code>JSON</code> {@link String} and the character at index is numeric.
      */
     @Override
-    public boolean canParseJson(final String json, final AtomicInteger index) {
-        if (index.get() < json.length()) {
-            final char c = json.charAt(index.get());
-            return Character.isDigit(c);
-        }
-        return false;
+    public boolean canParseJson(final JsonParsingProcess parsingProcess) {
+        return parsingProcess.isCharValid(Character::isDigit);
     }
 
     @Override
-    public NumberNode parseJson(final String json, final AtomicInteger index) throws InvalidJsonNumberNodeException {
-        if (!canParseJson(json, index)) {
+    public NumberNode parseJson(final JsonParsingProcess parsingProcess) throws InvalidJsonNumberNodeException {
+        if (!canParseJson(parsingProcess)) {
             throw new InvalidJsonNumberNodeException();
         }
 
-        if (iterateNumbers(json, index, this.beforeDelimiter) && iterateNumbers(json, index, this.afterDelimiter)) {
+        if (iterateNumbers(parsingProcess, this.beforeDelimiter) && iterateNumbers(parsingProcess, this.afterDelimiter)) {
             throw new InvalidJsonNumberNodeException();
         }
 
@@ -66,21 +62,20 @@ public class NumberNodeBuilder extends JsonNodeBuilder<NumberNode, InvalidJsonNu
      * until there are none left or a non-numeric character is found.
      * Any numeric characters will be added to {@code listToFill}.
      *
-     * @param json <code>JSON</code> {@link String} to iterate
-     * @param index the index to start iteration from
+     * @param parsingProcess a <code>JSON</code> {@link String} parsing process to iterate
      * @param listToFill {@link List} of characters to fill
      * @return {@code true} if {@link NumberNode#DECIMAL_DELIMITER} was found,
      *         {@code false} otherwise
      */
-    private boolean iterateNumbers(final String json, final AtomicInteger index, final List<Character> listToFill) {
-        while (index.get() < json.length()) {
-            final char c = json.charAt(index.get());
+    private boolean iterateNumbers(final JsonParsingProcess parsingProcess, final List<Character> listToFill) {
+        while (parsingProcess.isIndexInJson()) {
+            final char c = parsingProcess.getChar();
 
             if (Character.isDigit(c)) {
                 listToFill.add(c);
-                index.incrementAndGet();
+                parsingProcess.incrementIndex();
             } else if (c == NumberNode.DECIMAL_DELIMITER) {
-                index.incrementAndGet();
+                parsingProcess.incrementIndex();
                 return true;
             } else {
                 return false;
