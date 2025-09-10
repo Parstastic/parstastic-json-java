@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 /**
  * This class encapsulates behavior for general <code>JSON</code> parsing.
  */
-public class FullStringJsonParser implements IJsonParser<JsonNode, InvalidJsonException> {
+public class FullStringJsonParser extends JsonParser<JsonNode, InvalidJsonException> {
     /**
      * Creates a {@link FullStringJsonParser} object.
      */

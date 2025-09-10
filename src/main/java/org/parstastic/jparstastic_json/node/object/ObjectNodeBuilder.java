@@ -4,7 +4,7 @@ import org.parstastic.jparstastic_json.node.JsonNode;
 import org.parstastic.jparstastic_json.node.builders.JsonNodeWithInnerDelimitersBuilder;
 import org.parstastic.jparstastic_json.node.string.StringNodeBuilder;
 import org.parstastic.jparstastic_json.parser.FullStringJsonParser;
-import org.parstastic.jparstastic_json.parser.IJsonParser;
+import org.parstastic.jparstastic_json.parser.JsonParser;
 import org.parstastic.jparstastic_json.parser.JsonParsingProcess;
 import org.parstastic.jparstastic_json.parser.exceptions.InvalidJsonException;
 import org.parstastic.jparstastic_json.parser.exceptions.InvalidJsonObjectNodeException;
@@ -17,9 +17,15 @@ import static org.parstastic.jparstastic_json.node.object.ObjectNode.ObjectNodeP
 public class ObjectNodeBuilder extends JsonNodeWithInnerDelimitersBuilder<ObjectNode, InvalidJsonObjectNodeException, ObjectNodeProperty> {
     /**
      * This record is responsible for parsing <code>JSON</code> strings into {@link ObjectNodeProperty} objects.
-     * Creates an {@link ObjectNodePropertyBuilder} object.
      */
-    private record ObjectNodePropertyBuilder() implements IJsonParser<ObjectNodeProperty, InvalidJsonException> {
+    private static class ObjectNodePropertyBuilder extends JsonParser<ObjectNodeProperty, InvalidJsonException> {
+        /**
+         * Creates an {@link ObjectNodePropertyBuilder} object.
+         */
+        private ObjectNodePropertyBuilder() {
+            super();
+        }
+
         @Override
         public ObjectNodeProperty parseJson(final JsonParsingProcess parsingProcess) throws InvalidJsonException {
             final String key = parseKey(parsingProcess);

@@ -1,7 +1,7 @@
 package org.parstastic.jparstastic_json.node.builders;
 
 import org.parstastic.jparstastic_json.node.JsonNode;
-import org.parstastic.jparstastic_json.parser.IJsonParser;
+import org.parstastic.jparstastic_json.parser.JsonParser;
 import org.parstastic.jparstastic_json.parser.JsonParsingProcess;
 import org.parstastic.jparstastic_json.parser.exceptions.InvalidJsonException;
 
@@ -11,7 +11,7 @@ import org.parstastic.jparstastic_json.parser.exceptions.InvalidJsonException;
  * @param <T> type of the parsed {@link JsonNode} object
  * @param <E> type of {@link InvalidJsonException} that can be thrown during parsing
  */
-public abstract class JsonNodeBuilder<T extends JsonNode, E extends InvalidJsonException> implements IJsonParser<T, E> {
+public abstract class JsonNodeBuilder<T extends JsonNode, E extends InvalidJsonException> extends JsonParser<T, E> {
     /**
      * Creates a {@link JsonNodeBuilder} object.
      */

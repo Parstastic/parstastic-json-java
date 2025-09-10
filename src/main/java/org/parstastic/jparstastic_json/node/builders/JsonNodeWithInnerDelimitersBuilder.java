@@ -2,7 +2,7 @@ package org.parstastic.jparstastic_json.node.builders;
 
 import org.parstastic.jparstastic_json.node.JsonNode;
 import org.parstastic.jparstastic_json.node.JsonParticle;
-import org.parstastic.jparstastic_json.parser.IJsonParser;
+import org.parstastic.jparstastic_json.parser.JsonParser;
 import org.parstastic.jparstastic_json.parser.JsonParsingProcess;
 import org.parstastic.jparstastic_json.parser.exceptions.InvalidJsonException;
 
@@ -23,9 +23,9 @@ public abstract class JsonNodeWithInnerDelimitersBuilder<T extends JsonNode, E e
      */
     protected final char elementDelimiter;
     /**
-     * {@link IJsonParser} used to parse the elements.
+     * {@link JsonParser} used to parse the elements.
      */
-    protected final IJsonParser<P, ?> elementParser;
+    protected final JsonParser<P, ?> elementParser;
     /**
      * The elements of the parsed {@link JsonNode}.
      */
@@ -37,12 +37,12 @@ public abstract class JsonNodeWithInnerDelimitersBuilder<T extends JsonNode, E e
      * @param startDelimiter start delimiter of the parsed {@link JsonNode}
      * @param endDelimiter end delimiter of the parsed {@link JsonNode}
      * @param elementDelimiter delimiter for the elements of the parsed {@link JsonNode}
-     * @param elementParser {@link IJsonParser} that can be invoked for element parsing
+     * @param elementParser {@link JsonParser} that can be invoked for element parsing
      */
     protected JsonNodeWithInnerDelimitersBuilder(final char startDelimiter,
                                                  final char endDelimiter,
                                                  final char elementDelimiter,
-                                                 final IJsonParser<P, ?> elementParser) {
+                                                 final JsonParser<P, ?> elementParser) {
         super(startDelimiter, endDelimiter);
         this.elementDelimiter = elementDelimiter;
         this.elementParser = elementParser;

@@ -6,12 +6,12 @@ import org.parstastic.jparstastic_json.parser.exceptions.InvalidJsonException;
 import java.util.Set;
 
 /**
- * This interface represents anything that can parse a <code>JSON</code> {@link String} partially or fully.
+ * This abstact class represents anything that can parse a <code>JSON</code> {@link String} partially or fully.
  *
  * @param <T> type of the returned {@link JsonParticle}
  * @param <E> type of {@link InvalidJsonException} that can be thrown
  */
-public interface IJsonParser<T extends JsonParticle, E extends InvalidJsonException> {
+public abstract class JsonParser<T extends JsonParticle, E extends InvalidJsonException> {
     /**
      * These are all whitespace characters that are allowed within <code>JSON</code>.
      * This includes:
@@ -30,7 +30,14 @@ public interface IJsonParser<T extends JsonParticle, E extends InvalidJsonExcept
      *     </li>
      * </ul>
      */
-    Set<Character> ALLOWED_WHITESPACES = Set.of(' ', '\t', '\n', '\r');
+    public static final Set<Character> ALLOWED_WHITESPACES = Set.of(' ', '\t', '\n', '\r');
+
+    /**
+     * Creates a {@link JsonParser} object.
+     */
+    protected JsonParser() {
+        super();
+    }
 
     /**
      * Parses a <code>JSON</code> {@link String} partially or fully and returns a parsed object.
@@ -39,14 +46,14 @@ public interface IJsonParser<T extends JsonParticle, E extends InvalidJsonExcept
      * @return parsed {@link JsonParticle} object of type {@code T}
      * @throws E when any problem occurs during parsing
      */
-    T parseJson(final JsonParsingProcess parsingProcess) throws E;
+    public abstract T parseJson(final JsonParsingProcess parsingProcess) throws E;
 
     /**
      * Skips all whitespace characters, as defined by {@link #ALLOWED_WHITESPACES}, at the start of the <code>JSON</code> {@link String}.
      *
      * @param parsingProcess a <code>JSON</code> {@link String} parsing process to skip whitespaces in
      */
-    default void skipWhitespaces(final JsonParsingProcess parsingProcess) {
+    protected void skipWhitespaces(final JsonParsingProcess parsingProcess) {
         while (startsWithWhitespace(parsingProcess)) {
             parsingProcess.incrementIndex();
         }
@@ -59,7 +66,7 @@ public interface IJsonParser<T extends JsonParticle, E extends InvalidJsonExcept
      * @return {@code true} if the <code>JSON</code> {@link String} starts with a whitespace character,
      *         {@code false} otherwise
      */
-    default boolean startsWithWhitespace(final JsonParsingProcess parsingProcess) {
+    protected boolean startsWithWhitespace(final JsonParsingProcess parsingProcess) {
         return parsingProcess.isCharValid(ALLOWED_WHITESPACES::contains);
     }
 }
