@@ -15,26 +15,6 @@ import java.util.stream.Collectors;
  */
 public class JsonParser implements IJsonParser<JsonNode, InvalidJsonException> {
     /**
-     * These are all whitespace characters that are allowed within <code>JSON</code>.
-     * This includes:
-     * <ul>
-     *     <li>
-     *         <b>space</b>
-     *     </li>
-     *     <li>
-     *         <b>horizontal tab</b>
-     *     </li>
-     *     <li>
-     *         <b>line feed</b>
-     *     </li>
-     *     <li>
-     *         <b>carriage return</b>
-     *     </li>
-     * </ul>
-     */
-    public static final Set<Character> ALLOWED_WHITESPACES = Set.of(' ', '\t', '\n', '\r');
-
-    /**
      * Creates a {@link JsonParser} object.
      */
     public JsonParser() {
@@ -78,28 +58,6 @@ public class JsonParser implements IJsonParser<JsonNode, InvalidJsonException> {
         } else {
             throw new InvalidJsonException();
         }
-    }
-
-    /**
-     * Skips all whitespace characters, as defined by {@link #ALLOWED_WHITESPACES}, at the start of the <code>JSON</code> {@link String}.
-     *
-     * @param parsingProcess a <code>JSON</code> {@link String} parsing process to skip whitespaces in
-     */
-    public void skipWhitespaces(final JsonParsingProcess parsingProcess) {
-        while (startsWithWhitespace(parsingProcess)) {
-            parsingProcess.incrementIndex();
-        }
-    }
-
-    /**
-     * Determines whether a <code>JSON</code> {@link String} starts with a whitespace character.
-     *
-     * @param parsingProcess a <code>JSON</code> {@link String} parsing process to check for whitespace
-     * @return {@code true} if the <code>JSON</code> {@link String} starts with a whitespace character,
-     *         {@code false} otherwise
-     */
-    public boolean startsWithWhitespace(final JsonParsingProcess parsingProcess) {
-        return parsingProcess.isCharValid(ALLOWED_WHITESPACES::contains);
     }
 
     /**
