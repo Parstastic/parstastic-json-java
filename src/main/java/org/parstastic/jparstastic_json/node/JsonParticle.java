@@ -3,7 +3,7 @@ package org.parstastic.jparstastic_json.node;
 import static org.parstastic.jparstastic_json.node.object.ObjectNode.ObjectNodeProperty;
 
 /**
- * This interface represents anything that can be part of a <code>JSON</code> {@link String}.
+ * This abstract class represents anything that can be part of a <code>JSON</code> {@link String}.
  * Included are both nodes and key-value pairs of object nodes.
  *
  * @see JsonNode
