@@ -2,7 +2,7 @@ package org.parstastic.jparstastic_json.node.array;
 
 import org.parstastic.jparstastic_json.node.JsonNode;
 import org.parstastic.jparstastic_json.node.builders.JsonNodeWithInnerDelimitersBuilder;
-import org.parstastic.jparstastic_json.parser.JsonParser;
+import org.parstastic.jparstastic_json.parser.FullStringJsonParser;
 import org.parstastic.jparstastic_json.parser.exceptions.InvalidJsonArrayNodeException;
 
 /**
@@ -13,7 +13,7 @@ public class ArrayNodeBuilder extends JsonNodeWithInnerDelimitersBuilder<ArrayNo
      * Creates an {@link ArrayNodeBuilder} object.
      */
     public ArrayNodeBuilder() {
-        super(ArrayNode.DELIMITER_START, ArrayNode.DELIMITER_END, ArrayNode.DELIMITER_ELEMENTS, new JsonParser());
+        super(ArrayNode.DELIMITER_START, ArrayNode.DELIMITER_END, ArrayNode.DELIMITER_ELEMENTS, new FullStringJsonParser());
     }
 
     /**

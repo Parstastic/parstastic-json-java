@@ -3,8 +3,8 @@ package org.parstastic.jparstastic_json.node.object;
 import org.parstastic.jparstastic_json.node.JsonNode;
 import org.parstastic.jparstastic_json.node.builders.JsonNodeWithInnerDelimitersBuilder;
 import org.parstastic.jparstastic_json.node.string.StringNodeBuilder;
+import org.parstastic.jparstastic_json.parser.FullStringJsonParser;
 import org.parstastic.jparstastic_json.parser.IJsonParser;
-import org.parstastic.jparstastic_json.parser.JsonParser;
 import org.parstastic.jparstastic_json.parser.JsonParsingProcess;
 import org.parstastic.jparstastic_json.parser.exceptions.InvalidJsonException;
 import org.parstastic.jparstastic_json.parser.exceptions.InvalidJsonObjectNodeException;
@@ -72,7 +72,7 @@ public class ObjectNodeBuilder extends JsonNodeWithInnerDelimitersBuilder<Object
          */
         private JsonNode parseValue(final JsonParsingProcess parsingProcess) throws InvalidJsonException {
             skipWhitespaces(parsingProcess);
-            final JsonNode value = new JsonParser().parseJson(parsingProcess);
+            final JsonNode value = new FullStringJsonParser().parseJson(parsingProcess);
             skipWhitespaces(parsingProcess);
 
             return value;
