@@ -58,7 +58,7 @@ public abstract class JsonNodeWithOuterDelimitersBuilder<T extends JsonNode, E e
      * @see #startDelimiter
      */
     protected boolean isAtStartDelimiter(final JsonParsingProcess parsingProcess) {
-        return parsingProcess.isAtChar(this.startDelimiter);
+        return isAtDelimiter(parsingProcess, this.startDelimiter);
     }
 
     /**
@@ -70,7 +70,19 @@ public abstract class JsonNodeWithOuterDelimitersBuilder<T extends JsonNode, E e
      * @see #endDelimiter
      */
     protected boolean isAtEndDelimiter(final JsonParsingProcess parsingProcess) {
-        return parsingProcess.isAtChar(this.endDelimiter);
+        return isAtDelimiter(parsingProcess, this.endDelimiter);
+    }
+
+    /**
+     * Determines whether a <code>JSON</code> {@link String} is at a delimiter.
+     *
+     * @param parsingProcess a <code>JSON</code> {@link String} parsing process to check for delimiter
+     * @return {@code true} if the character at {@code index} in the given <code>JSON</code> {@link String} is {@code delimiter},
+     *         {@code false} otherwise
+     */
+    protected boolean isAtDelimiter(final JsonParsingProcess parsingProcess, final char delimiter) {
+        skipWhitespaces(parsingProcess);
+        return parsingProcess.isAtChar(delimiter);
     }
 
     @Override
