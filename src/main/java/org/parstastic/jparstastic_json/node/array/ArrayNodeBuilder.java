@@ -10,12 +10,10 @@ import org.parstastic.jparstastic_json.parser.exceptions.InvalidJsonArrayNodeExc
  */
 public class ArrayNodeBuilder extends JsonNodeWithInnerDelimitersBuilder<ArrayNode, InvalidJsonArrayNodeException, JsonNode> {
     /**
-     * Creates an {@link ArrayNodeBuilder} object with given {@link JsonParser}.
-     *
-     * @param jsonParser {@link JsonParser} that can be invoked for parsing
+     * Creates an {@link ArrayNodeBuilder} object.
      */
-    public ArrayNodeBuilder(final JsonParser jsonParser) {
-        super(jsonParser, ArrayNode.DELIMITER_START, ArrayNode.DELIMITER_END, ArrayNode.DELIMITER_ELEMENTS, jsonParser);
+    public ArrayNodeBuilder() {
+        super(ArrayNode.DELIMITER_START, ArrayNode.DELIMITER_END, ArrayNode.DELIMITER_ELEMENTS, new JsonParser());
     }
 
     /**

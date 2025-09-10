@@ -1,7 +1,6 @@
 package org.parstastic.jparstastic_json.node.builders;
 
 import org.parstastic.jparstastic_json.node.JsonNode;
-import org.parstastic.jparstastic_json.parser.JsonParser;
 import org.parstastic.jparstastic_json.parser.JsonParsingProcess;
 import org.parstastic.jparstastic_json.parser.exceptions.InvalidJsonException;
 
@@ -23,13 +22,12 @@ public abstract class JsonNodeFullTextMatchingBuilder<T extends JsonNode, E exte
     private final Set<O> possibleValues;
 
     /**
-     * Creates a {@link JsonNodeFullTextMatchingBuilder} object with given {@link JsonParser} and a {@link Set} of possible values.
+     * Creates a {@link JsonNodeFullTextMatchingBuilder} object with given {@link Set} of possible values.
      *
-     * @param jsonParser {@link JsonParser} that can be invoked for parsing
      * @param possibleValues {@link Set} of possible values
      */
-    protected JsonNodeFullTextMatchingBuilder(final JsonParser jsonParser, final Set<O> possibleValues) {
-        super(jsonParser);
+    protected JsonNodeFullTextMatchingBuilder(final Set<O> possibleValues) {
+        super();
         this.possibleValues = possibleValues;
     }
 

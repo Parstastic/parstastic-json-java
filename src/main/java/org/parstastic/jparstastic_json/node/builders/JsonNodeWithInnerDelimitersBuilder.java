@@ -3,7 +3,6 @@ package org.parstastic.jparstastic_json.node.builders;
 import org.parstastic.jparstastic_json.node.JsonNode;
 import org.parstastic.jparstastic_json.node.JsonParticle;
 import org.parstastic.jparstastic_json.parser.IJsonParser;
-import org.parstastic.jparstastic_json.parser.JsonParser;
 import org.parstastic.jparstastic_json.parser.JsonParsingProcess;
 import org.parstastic.jparstastic_json.parser.exceptions.InvalidJsonException;
 
@@ -33,20 +32,18 @@ public abstract class JsonNodeWithInnerDelimitersBuilder<T extends JsonNode, E e
     protected final List<P> elements;
 
     /**
-     * Creates a {@link JsonNodeWithInnerDelimitersBuilder} object with given {@link JsonParser}, start delimiter, end delimiter, element delimiter and element parser.
+     * Creates a {@link JsonNodeWithInnerDelimitersBuilder} object with given start delimiter, end delimiter, element delimiter and element parser.
      *
-     * @param jsonParser {@link JsonParser} that can be invoked for parsing
      * @param startDelimiter start delimiter of the parsed {@link JsonNode}
      * @param endDelimiter end delimiter of the parsed {@link JsonNode}
      * @param elementDelimiter delimiter for the elements of the parsed {@link JsonNode}
      * @param elementParser {@link IJsonParser} that can be invoked for element parsing
      */
-    protected JsonNodeWithInnerDelimitersBuilder(final JsonParser jsonParser,
-                                                 final char startDelimiter,
+    protected JsonNodeWithInnerDelimitersBuilder(final char startDelimiter,
                                                  final char endDelimiter,
                                                  final char elementDelimiter,
                                                  final IJsonParser<P, ?> elementParser) {
-        super(jsonParser, startDelimiter, endDelimiter);
+        super(startDelimiter, endDelimiter);
         this.elementDelimiter = elementDelimiter;
         this.elementParser = elementParser;
         this.elements = new LinkedList<>();
@@ -61,7 +58,7 @@ public abstract class JsonNodeWithInnerDelimitersBuilder<T extends JsonNode, E e
      */
     @Override
     protected boolean processChar(final JsonParsingProcess parsingProcess) throws E {
-        this.jsonParser.skipWhitespaces(parsingProcess);
+        skipWhitespaces(parsingProcess);
 
         return super.processChar(parsingProcess);
     }
@@ -83,7 +80,7 @@ public abstract class JsonNodeWithInnerDelimitersBuilder<T extends JsonNode, E e
         final P element = this.elementParser.parseJson(parsingProcess);
         this.elements.add(element);
 
-        this.jsonParser.skipWhitespaces(parsingProcess);
+        skipWhitespaces(parsingProcess);
         return !isAtEndDelimiter(parsingProcess);
     }
 }

@@ -89,8 +89,7 @@ public class JsonParser implements IJsonParser<JsonNode, InvalidJsonException> {
     }
 
     /**
-     * Creates an instance of a {@link JsonNodeBuilder} {@link Class} using a public constructor with {@link JsonParser} as parameter.
-     * Passes this {@link JsonParser} object as constructor parameter to the {@link JsonNodeBuilder} object.
+     * Creates an instance of a {@link JsonNodeBuilder} {@link Class} using a public default constructor.
      *
      * @param clazz {@link Class} object to create a {@link JsonNodeBuilder} of
      * @return a {@link JsonNodeBuilder} object of given {@code clazz} or {@code null} if any exception occurs.
@@ -98,7 +97,7 @@ public class JsonParser implements IJsonParser<JsonNode, InvalidJsonException> {
     @SuppressWarnings("rawtypes")
     private JsonNodeBuilder createJsonNodeBuilder(final Class<? extends JsonNodeBuilder> clazz) {
         try {
-            return clazz.getConstructor(JsonParser.class).newInstance(this);
+            return clazz.getConstructor().newInstance();
         } catch (final NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
             return null;
         }

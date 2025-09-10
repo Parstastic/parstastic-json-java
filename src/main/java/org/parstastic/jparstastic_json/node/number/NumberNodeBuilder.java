@@ -1,7 +1,6 @@
 package org.parstastic.jparstastic_json.node.number;
 
 import org.parstastic.jparstastic_json.node.builders.JsonNodeBuilder;
-import org.parstastic.jparstastic_json.parser.JsonParser;
 import org.parstastic.jparstastic_json.parser.JsonParsingProcess;
 import org.parstastic.jparstastic_json.parser.exceptions.InvalidJsonNumberNodeException;
 
@@ -23,12 +22,10 @@ public class NumberNodeBuilder extends JsonNodeBuilder<NumberNode, InvalidJsonNu
     private final List<Character> afterDelimiter;
 
     /**
-     * Creates a {@link NumberNodeBuilder} object with given {@link JsonParser}.
-     *
-     * @param jsonParser {@link JsonParser} that can be invoked for parsing
+     * Creates a {@link NumberNodeBuilder} object.
      */
-    public NumberNodeBuilder(final JsonParser jsonParser) {
-        super(jsonParser);
+    public NumberNodeBuilder() {
+        super();
         this.beforeDelimiter = new LinkedList<>();
         this.afterDelimiter = new LinkedList<>();
     }

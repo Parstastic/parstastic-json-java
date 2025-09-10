@@ -1,7 +1,6 @@
 package org.parstastic.jparstastic_json.node.string;
 
 import org.parstastic.jparstastic_json.node.builders.JsonNodeWithOuterDelimitersBuilder;
-import org.parstastic.jparstastic_json.parser.JsonParser;
 import org.parstastic.jparstastic_json.parser.JsonParsingProcess;
 import org.parstastic.jparstastic_json.parser.exceptions.InvalidJsonStringNodeException;
 
@@ -65,12 +64,10 @@ public class StringNodeBuilder extends JsonNodeWithOuterDelimitersBuilder<String
     private boolean isEscaped;
 
     /**
-     * Creates a {@link StringNodeBuilder} object with given {@link JsonParser}.
-     *
-     * @param jsonParser {@link JsonParser} that can be invoked for parsing
+     * Creates a {@link StringNodeBuilder} object.
      */
-    public StringNodeBuilder(final JsonParser jsonParser) {
-        super(jsonParser, StringNode.DELIMITER, StringNode.DELIMITER);
+    public StringNodeBuilder() {
+        super(StringNode.DELIMITER, StringNode.DELIMITER);
         this.chars = new LinkedList<>();
         this.isEscaped = false;
     }

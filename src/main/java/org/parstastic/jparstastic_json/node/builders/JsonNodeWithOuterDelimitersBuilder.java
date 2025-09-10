@@ -1,7 +1,6 @@
 package org.parstastic.jparstastic_json.node.builders;
 
 import org.parstastic.jparstastic_json.node.JsonNode;
-import org.parstastic.jparstastic_json.parser.JsonParser;
 import org.parstastic.jparstastic_json.parser.JsonParsingProcess;
 import org.parstastic.jparstastic_json.parser.exceptions.InvalidJsonException;
 
@@ -25,16 +24,14 @@ public abstract class JsonNodeWithOuterDelimitersBuilder<T extends JsonNode, E e
     protected final char endDelimiter;
 
     /**
-     * Creates a {@link JsonNodeWithOuterDelimitersBuilder} object with given {@link JsonParser}, start delimiter and end delimiter.
+     * Creates a {@link JsonNodeWithOuterDelimitersBuilder} object with given start delimiter and end delimiter.
      *
-     * @param jsonParser {@link JsonParser} that can be invoked for parsing
      * @param startDelimiter start delimiter of the parsed {@link JsonNode}
      * @param endDelimiter end delimiter of the parsed {@link JsonNode}
      */
-    protected JsonNodeWithOuterDelimitersBuilder(final JsonParser jsonParser,
-                                                 final char startDelimiter,
+    protected JsonNodeWithOuterDelimitersBuilder(final char startDelimiter,
                                                  final char endDelimiter) {
-        super(jsonParser);
+        super();
         this.startDelimiter = startDelimiter;
         this.endDelimiter = endDelimiter;
     }

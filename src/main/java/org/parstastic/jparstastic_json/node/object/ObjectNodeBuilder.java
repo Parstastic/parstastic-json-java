@@ -17,11 +17,9 @@ import static org.parstastic.jparstastic_json.node.object.ObjectNode.ObjectNodeP
 public class ObjectNodeBuilder extends JsonNodeWithInnerDelimitersBuilder<ObjectNode, InvalidJsonObjectNodeException, ObjectNodeProperty> {
     /**
      * This record is responsible for parsing <code>JSON</code> strings into {@link ObjectNodeProperty} objects.
-     * Creates an {@link ObjectNodePropertyBuilder} object with given {@link JsonParser}.
-     *
-     * @param jsonParser {@link JsonParser} that can be invoked for parsing
+     * Creates an {@link ObjectNodePropertyBuilder} object.
      */
-    private record ObjectNodePropertyBuilder(JsonParser jsonParser) implements IJsonParser<ObjectNodeProperty, InvalidJsonException> {
+    private record ObjectNodePropertyBuilder() implements IJsonParser<ObjectNodeProperty, InvalidJsonException> {
         @Override
         public ObjectNodeProperty parseJson(final JsonParsingProcess parsingProcess) throws InvalidJsonException {
             final String key = parseKey(parsingProcess);
@@ -42,9 +40,9 @@ public class ObjectNodeBuilder extends JsonNodeWithInnerDelimitersBuilder<Object
          * @throws InvalidJsonException when any problem occurs during parsing
          */
         private String parseKey(final JsonParsingProcess parsingProcess) throws InvalidJsonException {
-            this.jsonParser.skipWhitespaces(parsingProcess);
-            final String key = new StringNodeBuilder(this.jsonParser).parseJson(parsingProcess).getValue();
-            this.jsonParser.skipWhitespaces(parsingProcess);
+            skipWhitespaces(parsingProcess);
+            final String key = new StringNodeBuilder().parseJson(parsingProcess).getValue();
+            skipWhitespaces(parsingProcess);
 
             return key;
         }
@@ -73,21 +71,19 @@ public class ObjectNodeBuilder extends JsonNodeWithInnerDelimitersBuilder<Object
          * @throws InvalidJsonException when any problem occurs during parsing
          */
         private JsonNode parseValue(final JsonParsingProcess parsingProcess) throws InvalidJsonException {
-            this.jsonParser.skipWhitespaces(parsingProcess);
-            final JsonNode value = this.jsonParser.parseJson(parsingProcess);
-            this.jsonParser.skipWhitespaces(parsingProcess);
+            skipWhitespaces(parsingProcess);
+            final JsonNode value = new JsonParser().parseJson(parsingProcess);
+            skipWhitespaces(parsingProcess);
 
             return value;
         }
     }
 
     /**
-     * Creates an {@link ObjectNodeBuilder} object with given {@link JsonParser}.
-     *
-     * @param jsonParser {@link JsonParser} that can be invoked for parsing
+     * Creates an {@link ObjectNodeBuilder} object.
      */
-    public ObjectNodeBuilder(final JsonParser jsonParser) {
-        super(jsonParser, ObjectNode.DELIMITER_START, ObjectNode.DELIMITER_END, ObjectNode.DELIMITER_ELEMENTS, new ObjectNodePropertyBuilder(jsonParser));
+    public ObjectNodeBuilder() {
+        super(ObjectNode.DELIMITER_START, ObjectNode.DELIMITER_END, ObjectNode.DELIMITER_ELEMENTS, new ObjectNodePropertyBuilder());
     }
 
     /**
