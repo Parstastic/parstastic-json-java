@@ -49,6 +49,16 @@ public abstract class JsonParser<T extends JsonParticle, E extends InvalidJsonEx
     public abstract T parseJson(final JsonParsingProcess parsingProcess) throws E;
 
     /**
+     * Creates a {@link JsonParsingProcess} from a <code>JSON</code> {@link String}.
+     *
+     * @param json <code>JSON</code> {@link String} to create {@link JsonParsingProcess} with
+     * @return a {@link JsonParsingProcess} for <code>JSON</code> {@link String}
+     */
+    protected JsonParsingProcess createParsingProcess(final String json) {
+        return new JsonParsingProcess(json);
+    }
+
+    /**
      * Skips all whitespace characters, as defined by {@link #ALLOWED_WHITESPACES}, at the start of the <code>JSON</code> {@link String}.
      *
      * @param parsingProcess a <code>JSON</code> {@link String} parsing process to skip whitespaces in

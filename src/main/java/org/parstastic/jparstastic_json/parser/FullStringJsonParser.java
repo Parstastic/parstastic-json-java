@@ -30,7 +30,7 @@ public class FullStringJsonParser extends JsonParser<JsonNode, InvalidJsonExcept
      * @see #parseJson(JsonParsingProcess)
      */
     public JsonNode parseJson(final String json) throws InvalidJsonException {
-        final JsonParsingProcess parsingProcess = new JsonParsingProcess(json);
+        final JsonParsingProcess parsingProcess = createParsingProcess(json);
         final JsonNode node = parseJson(parsingProcess);
 
         skipWhitespaces(parsingProcess);
