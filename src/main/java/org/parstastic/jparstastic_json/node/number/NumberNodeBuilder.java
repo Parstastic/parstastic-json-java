@@ -38,6 +38,7 @@ public class NumberNodeBuilder extends JsonNodeBuilder<NumberNode, InvalidJsonNu
      */
     @Override
     public boolean canParseJson(final JsonParsingProcess parsingProcess) {
+        skipWhitespaces(parsingProcess);
         return parsingProcess.isCharValid(Character::isDigit);
     }
 
