@@ -6,7 +6,7 @@ import org.parstastic.jparstastic_json.parser.exceptions.InvalidJsonException;
 import java.util.Set;
 
 /**
- * This abstact class represents anything that can parse a <code>JSON</code> {@link String} partially or fully.
+ * This abstract class represents anything that can parse a <code>JSON</code> {@link String} partially or fully.
  *
  * @param <T> type of the returned {@link JsonParticle}
  * @param <E> type of {@link InvalidJsonException} that can be thrown
