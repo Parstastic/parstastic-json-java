@@ -21,14 +21,7 @@ public class FullStringJsonParser extends JsonParser<JsonNode, InvalidJsonExcept
         super();
     }
 
-    /**
-     * Parses a <code>JSON</code> {@link String} fully and returns a parsed {@link JsonNode} object.
-     *
-     * @param json <code>JSON</code> {@link String} to parse
-     * @return parsed {@link JsonNode} object
-     * @throws InvalidJsonException when any problem occurs during parsing
-     * @see #parseJson(JsonParsingProcess)
-     */
+    @Override
     public JsonNode parseJson(final String json) throws InvalidJsonException {
         final JsonParsingProcess parsingProcess = createParsingProcess(json);
         final JsonNode node = parseJson(parsingProcess);

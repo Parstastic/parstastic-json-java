@@ -42,9 +42,22 @@ public abstract class JsonParser<T extends JsonParticle, E extends InvalidJsonEx
     /**
      * Parses a <code>JSON</code> {@link String} partially or fully and returns a parsed object.
      *
+     * @param json <code>JSON</code> {@link String} to parse
+     * @return parsed {@link JsonParticle} object of type {@code T}
+     * @throws E when any problem occurs during parsing
+     * @see #parseJson(JsonParsingProcess)
+     */
+    public T parseJson(final String json) throws E {
+        return parseJson(createParsingProcess(json));
+    }
+
+    /**
+     * Parses a <code>JSON</code> {@link String} partially or fully and returns a parsed object.
+     *
      * @param parsingProcess a <code>JSON</code> {@link String} parsing process
      * @return parsed {@link JsonParticle} object of type {@code T}
      * @throws E when any problem occurs during parsing
+     * @see #parseJson(String)
      */
     public abstract T parseJson(final JsonParsingProcess parsingProcess) throws E;
 
