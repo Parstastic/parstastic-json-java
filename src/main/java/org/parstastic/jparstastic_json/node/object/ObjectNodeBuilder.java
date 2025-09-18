@@ -83,6 +83,11 @@ public class ObjectNodeBuilder extends JsonNodeWithInnerDelimitersBuilder<Object
 
             return value;
         }
+
+        @Override
+        protected InvalidJsonException createException(final InvalidJsonException exception) {
+            return exception;
+        }
     }
 
     /**
@@ -110,5 +115,10 @@ public class ObjectNodeBuilder extends JsonNodeWithInnerDelimitersBuilder<Object
     @Override
     protected InvalidJsonObjectNodeException createException() {
         return new InvalidJsonObjectNodeException();
+    }
+
+    @Override
+    protected InvalidJsonObjectNodeException createException(final InvalidJsonException exception) {
+        return new InvalidJsonObjectNodeException(exception);
     }
 }

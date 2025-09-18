@@ -2,6 +2,7 @@ package org.parstastic.jparstastic_json.node.boolean_node;
 
 import org.parstastic.jparstastic_json.node.builders.JsonNodeFullTextMatchingBuilder;
 import org.parstastic.jparstastic_json.parser.exceptions.InvalidJsonBooleanNodeException;
+import org.parstastic.jparstastic_json.parser.exceptions.InvalidJsonException;
 
 import java.util.Set;
 
@@ -37,5 +38,10 @@ public class BooleanNodeBuilder extends JsonNodeFullTextMatchingBuilder<BooleanN
     @Override
     protected InvalidJsonBooleanNodeException createException() {
         return new InvalidJsonBooleanNodeException();
+    }
+
+    @Override
+    protected InvalidJsonBooleanNodeException createException(final InvalidJsonException exception) {
+        return new InvalidJsonBooleanNodeException(exception);
     }
 }

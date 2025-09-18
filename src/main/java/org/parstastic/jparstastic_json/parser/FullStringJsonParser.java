@@ -53,6 +53,11 @@ public class FullStringJsonParser extends JsonParser<JsonNode, InvalidJsonExcept
         }
     }
 
+    @Override
+    protected InvalidJsonException createException(final InvalidJsonException exception) {
+        return new InvalidJsonException(exception);
+    }
+
     /**
      * Creates a {@link JsonNodeBuilder} for a <code>JSON</code> {@link String}.
      *

@@ -2,6 +2,7 @@ package org.parstastic.jparstastic_json.node.number;
 
 import org.parstastic.jparstastic_json.node.builders.JsonNodeBuilder;
 import org.parstastic.jparstastic_json.parser.JsonParsingProcess;
+import org.parstastic.jparstastic_json.parser.exceptions.InvalidJsonException;
 import org.parstastic.jparstastic_json.parser.exceptions.InvalidJsonNumberNodeException;
 
 import java.util.LinkedList;
@@ -130,5 +131,10 @@ public class NumberNodeBuilder extends JsonNodeBuilder<NumberNode, InvalidJsonNu
         return charList.stream()
                 .map(String::valueOf)
                 .collect(Collectors.joining());
+    }
+
+    @Override
+    protected InvalidJsonNumberNodeException createException(final InvalidJsonException exception) {
+        return new InvalidJsonNumberNodeException(exception);
     }
 }

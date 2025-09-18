@@ -48,7 +48,16 @@ public abstract class JsonParser<T extends JsonParticle, E extends InvalidJsonEx
      * @see #parseJson(JsonParsingProcess)
      */
     public T parseJson(final String json) throws E {
-        return parseJson(createParsingProcess(json));
+        try {
+            return parseJson(createParsingProcess(json));
+        } catch (final InvalidJsonException e) {
+            final E exception = createException(e);
+            if (exception.getClass() == e.getClass()) {
+                throw e;
+            } else {
+                throw exception;
+            }
+        }
     }
 
     /**
@@ -92,4 +101,13 @@ public abstract class JsonParser<T extends JsonParticle, E extends InvalidJsonEx
     protected boolean startsWithWhitespace(final JsonParsingProcess parsingProcess) {
         return parsingProcess.isCharValid(ALLOWED_WHITESPACES::contains);
     }
+
+    /**
+     * Creates an {@link InvalidJsonException} object corresponding to the {@link JsonParticle} type to create
+     * using a given {@link InvalidJsonException} as cause.
+     *
+     * @param exception cause of the {@link InvalidJsonException}
+     * @return an {@link InvalidJsonException} object
+     */
+    protected abstract E createException(final InvalidJsonException exception);
 }

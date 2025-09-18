@@ -2,6 +2,7 @@ package org.parstastic.jparstastic_json.node.string;
 
 import org.parstastic.jparstastic_json.node.builders.JsonNodeWithOuterDelimitersBuilder;
 import org.parstastic.jparstastic_json.parser.JsonParsingProcess;
+import org.parstastic.jparstastic_json.parser.exceptions.InvalidJsonException;
 import org.parstastic.jparstastic_json.parser.exceptions.InvalidJsonStringNodeException;
 
 import java.util.LinkedList;
@@ -148,5 +149,10 @@ public class StringNodeBuilder extends JsonNodeWithOuterDelimitersBuilder<String
     @Override
     protected InvalidJsonStringNodeException createException() {
         return new InvalidJsonStringNodeException();
+    }
+
+    @Override
+    protected InvalidJsonStringNodeException createException(final InvalidJsonException exception) {
+        return new InvalidJsonStringNodeException(exception);
     }
 }

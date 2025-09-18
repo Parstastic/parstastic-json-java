@@ -1,6 +1,7 @@
 package org.parstastic.jparstastic_json.node.null_node;
 
 import org.parstastic.jparstastic_json.node.builders.JsonNodeFullTextMatchingBuilder;
+import org.parstastic.jparstastic_json.parser.exceptions.InvalidJsonException;
 import org.parstastic.jparstastic_json.parser.exceptions.InvalidJsonNullNodeException;
 
 import java.util.Set;
@@ -35,5 +36,10 @@ public class NullNodeBuilder extends JsonNodeFullTextMatchingBuilder<NullNode, I
     @Override
     protected InvalidJsonNullNodeException createException() {
         return new InvalidJsonNullNodeException();
+    }
+
+    @Override
+    protected InvalidJsonNullNodeException createException(final InvalidJsonException exception) {
+        return new InvalidJsonNullNodeException(exception);
     }
 }
