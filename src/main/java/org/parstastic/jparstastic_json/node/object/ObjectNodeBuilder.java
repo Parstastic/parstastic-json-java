@@ -8,6 +8,9 @@ import org.parstastic.jparstastic_json.parser.JsonParser;
 import org.parstastic.jparstastic_json.parser.JsonParsingProcess;
 import org.parstastic.jparstastic_json.parser.exceptions.InvalidJsonException;
 import org.parstastic.jparstastic_json.parser.exceptions.InvalidJsonObjectNodeException;
+import org.parstastic.jparstastic_json.parser.exceptions.InvalidJsonObjectNodePropertyException;
+
+import java.util.function.Supplier;
 
 import static org.parstastic.jparstastic_json.node.object.ObjectNode.ObjectNodeProperty;
 
@@ -18,7 +21,7 @@ public class ObjectNodeBuilder extends JsonNodeWithInnerDelimitersBuilder<Object
     /**
      * This record is responsible for parsing <code>JSON</code> strings into {@link ObjectNodeProperty} objects.
      */
-    private static class ObjectNodePropertyBuilder extends JsonParser<ObjectNodeProperty, InvalidJsonException> {
+    private static class ObjectNodePropertyBuilder extends JsonParser<ObjectNodeProperty, InvalidJsonObjectNodePropertyException> {
         /**
          * Creates an {@link ObjectNodePropertyBuilder} object.
          */
@@ -27,14 +30,31 @@ public class ObjectNodeBuilder extends JsonNodeWithInnerDelimitersBuilder<Object
         }
 
         @Override
-        public ObjectNodeProperty parseJson(final JsonParsingProcess parsingProcess) throws InvalidJsonException {
-            final String key = parseKey(parsingProcess);
+        public ObjectNodeProperty parseJson(final JsonParsingProcess parsingProcess) throws InvalidJsonObjectNodePropertyException {
+            final String key = parseOrThrow(() -> parseKey(parsingProcess));
 
             validateDelimiter(parsingProcess);
 
-            final JsonNode value = parseValue(parsingProcess);
+            final JsonNode value = parseOrThrow(() -> parseValue(parsingProcess));
 
             return new ObjectNodeProperty(key, value);
+        }
+
+        /**
+         * Tries to execute a given {@code parsingFunction} and return its value.
+         * Throws {@link InvalidJsonObjectNodePropertyException} if the {@code parsingFunction} fails with {@link InvalidJsonException}.
+         *
+         * @param parsingFunction {@link Supplier} that parses and returns a value
+         * @return value of {@code parsingFunction}
+         * @param <T> type of the return value of {@code parsingFunction}
+         * @throws InvalidJsonObjectNodePropertyException when any problem occurs during parsing
+         */
+        private <T> T parseOrThrow(final Supplier<T> parsingFunction) throws InvalidJsonObjectNodePropertyException {
+            try {
+                return parsingFunction.get();
+            } catch (final InvalidJsonException e) {
+                throw createException(e);
+            }
         }
 
         /**
@@ -58,13 +78,13 @@ public class ObjectNodeBuilder extends JsonNodeWithInnerDelimitersBuilder<Object
          * After successful validation, increments {@code index}.
          *
          * @param parsingProcess a <code>JSON</code> {@link String} parsing process
-         * @throws InvalidJsonException when the delimiter is not found
+         * @throws InvalidJsonObjectNodePropertyException when the delimiter is not found
          */
-        private void validateDelimiter(final JsonParsingProcess parsingProcess) throws InvalidJsonException {
+        private void validateDelimiter(final JsonParsingProcess parsingProcess) throws InvalidJsonObjectNodePropertyException {
             if (parsingProcess.isAtChar(ObjectNodeProperty.DELIMITER)) {
                 parsingProcess.incrementIndex();
             } else {
-                throw new InvalidJsonException();
+                throw createException();
             }
         }
 
@@ -85,18 +105,18 @@ public class ObjectNodeBuilder extends JsonNodeWithInnerDelimitersBuilder<Object
         }
 
         /**
-         * Creates an {@link InvalidJsonException}.
+         * Creates an {@link InvalidJsonObjectNodePropertyException}.
          *
-         * @return an {@link InvalidJsonException}
+         * @return an {@link InvalidJsonObjectNodePropertyException}
          */
         @Override
-        protected InvalidJsonException createException() {
-            return new InvalidJsonException();
+        protected InvalidJsonObjectNodePropertyException createException() {
+            return new InvalidJsonObjectNodePropertyException();
         }
 
         @Override
-        protected InvalidJsonException createException(final InvalidJsonException exception) {
-            return exception;
+        protected InvalidJsonObjectNodePropertyException createException(final InvalidJsonException exception) {
+            return new InvalidJsonObjectNodePropertyException(exception);
         }
     }
 
