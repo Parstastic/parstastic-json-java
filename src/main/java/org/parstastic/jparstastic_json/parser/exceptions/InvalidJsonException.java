@@ -5,7 +5,7 @@ package org.parstastic.jparstastic_json.parser.exceptions;
  */
 public class InvalidJsonException extends RuntimeException {
     /**
-     * Creates an {@link InvalidJsonException} without a message
+     * Creates an {@link InvalidJsonException} without a message or a cause
      */
     public InvalidJsonException() {
         super();
@@ -16,5 +16,19 @@ public class InvalidJsonException extends RuntimeException {
      */
     public InvalidJsonException(final String message) {
         super(message);
+    }
+
+    /**
+     * Creates an {@link InvalidJsonException} with a cause
+     */
+    public InvalidJsonException(final InvalidJsonException cause) {
+        super(cause);
+    }
+
+    /**
+     * Creates an {@link InvalidJsonException} with a message and a cause
+     */
+    public InvalidJsonException(final String message, final InvalidJsonException cause) {
+        super(message, cause);
     }
 }
