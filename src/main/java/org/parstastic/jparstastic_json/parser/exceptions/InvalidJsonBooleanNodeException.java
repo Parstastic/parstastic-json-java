@@ -7,7 +7,7 @@ import org.parstastic.jparstastic_json.node.boolean_node.BooleanNode;
  */
 public class InvalidJsonBooleanNodeException extends InvalidJsonException {
     /**
-     * Creates an {@link InvalidJsonBooleanNodeException} without a message
+     * Creates an {@link InvalidJsonBooleanNodeException} without a message or a cause
      */
     public InvalidJsonBooleanNodeException() {
         super();
@@ -18,5 +18,19 @@ public class InvalidJsonBooleanNodeException extends InvalidJsonException {
      */
     public InvalidJsonBooleanNodeException(final String message) {
         super(message);
+    }
+
+    /**
+     * Creates an {@link InvalidJsonBooleanNodeException} with a cause
+     */
+    public InvalidJsonBooleanNodeException(final InvalidJsonException cause) {
+        super(cause);
+    }
+
+    /**
+     * Creates an {@link InvalidJsonBooleanNodeException} with a message and a cause
+     */
+    public InvalidJsonBooleanNodeException(final String message, final InvalidJsonException cause) {
+        super(message, cause);
     }
 }
