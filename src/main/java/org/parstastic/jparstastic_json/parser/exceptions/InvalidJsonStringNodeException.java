@@ -7,7 +7,7 @@ import org.parstastic.jparstastic_json.node.string.StringNode;
  */
 public class InvalidJsonStringNodeException extends InvalidJsonException {
     /**
-     * Creates an {@link InvalidJsonStringNodeException} without a message
+     * Creates an {@link InvalidJsonStringNodeException} without a message or a cause
      */
     public InvalidJsonStringNodeException() {
         super();
@@ -18,5 +18,19 @@ public class InvalidJsonStringNodeException extends InvalidJsonException {
      */
     public InvalidJsonStringNodeException(final String message) {
         super(message);
+    }
+
+    /**
+     * Creates an {@link InvalidJsonStringNodeException} with a cause
+     */
+    public InvalidJsonStringNodeException(final InvalidJsonException cause) {
+        super(cause);
+    }
+
+    /**
+     * Creates an {@link InvalidJsonStringNodeException} with a message and a cause
+     */
+    public InvalidJsonStringNodeException(final String message, final InvalidJsonException cause) {
+        super(message, cause);
     }
 }
