@@ -79,11 +79,4 @@ public abstract class JsonNodeFullTextMatchingBuilder<T extends JsonNode, E exte
      * @return a {@link JsonNode} object with given {@code value}
      */
     protected abstract T createNode(final O value);
-
-    /**
-     * Creates an {@link InvalidJsonException} object corresponding to the {@link JsonNode} type to create.
-     *
-     * @return an {@link InvalidJsonException} object
-     */
-    protected abstract E createException();
 }

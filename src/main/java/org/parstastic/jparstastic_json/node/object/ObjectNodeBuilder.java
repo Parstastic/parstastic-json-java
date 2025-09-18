@@ -84,6 +84,16 @@ public class ObjectNodeBuilder extends JsonNodeWithInnerDelimitersBuilder<Object
             return value;
         }
 
+        /**
+         * Creates an {@link InvalidJsonException}.
+         *
+         * @return an {@link InvalidJsonException}
+         */
+        @Override
+        protected InvalidJsonException createException() {
+            return new InvalidJsonException();
+        }
+
         @Override
         protected InvalidJsonException createException(final InvalidJsonException exception) {
             return exception;

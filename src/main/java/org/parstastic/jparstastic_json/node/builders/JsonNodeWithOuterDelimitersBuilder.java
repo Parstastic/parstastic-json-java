@@ -188,11 +188,4 @@ public abstract class JsonNodeWithOuterDelimitersBuilder<T extends JsonNode, E e
      * @return a {@link JsonNode} object with previously specified parameters
      */
     protected abstract T createNode();
-
-    /**
-     * Creates an {@link InvalidJsonException} object corresponding to the {@link JsonNode} type to create.
-     *
-     * @return an {@link InvalidJsonException} object
-     */
-    protected abstract E createException();
 }

@@ -133,6 +133,16 @@ public class NumberNodeBuilder extends JsonNodeBuilder<NumberNode, InvalidJsonNu
                 .collect(Collectors.joining());
     }
 
+    /**
+     * Creates an {@link InvalidJsonNumberNodeException}.
+     *
+     * @return an {@link InvalidJsonNumberNodeException}
+     */
+    @Override
+    protected InvalidJsonNumberNodeException createException() {
+        return new InvalidJsonNumberNodeException();
+    }
+
     @Override
     protected InvalidJsonNumberNodeException createException(final InvalidJsonException exception) {
         return new InvalidJsonNumberNodeException(exception);

@@ -103,6 +103,13 @@ public abstract class JsonParser<T extends JsonParticle, E extends InvalidJsonEx
     }
 
     /**
+     * Creates an {@link InvalidJsonException} object corresponding to the {@link JsonParticle} type to create.
+     *
+     * @return an {@link InvalidJsonException} object
+     */
+    protected abstract E createException();
+
+    /**
      * Creates an {@link InvalidJsonException} object corresponding to the {@link JsonParticle} type to create
      * using a given {@link InvalidJsonException} as cause.
      *
