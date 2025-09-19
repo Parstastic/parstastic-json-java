@@ -32,7 +32,8 @@ class StringNodeBuilderTest extends JsonParserTest<StringNode, InvalidJsonString
     @Override
     protected List<String> getInvalidJsonStrings() {
         return List.of(
-                "\"Hello World!"
+                "\"Hello World!",
+                "\"\\q\""
         );
     }
 }
