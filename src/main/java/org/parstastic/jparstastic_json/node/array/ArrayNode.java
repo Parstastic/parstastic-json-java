@@ -1,6 +1,7 @@
 package org.parstastic.jparstastic_json.node.array;
 
 import org.parstastic.jparstastic_json.node.JsonNode;
+import org.parstastic.jparstastic_json.node.StringifyOptions;
 
 import java.util.List;
 
@@ -38,7 +39,17 @@ public class ArrayNode extends JsonNode {
     }
 
     @Override
-    public String stringify() {
-        return this.elements.toString();
+    public String stringify(final StringifyOptions options) {
+        final StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(options.getIndentation()).append(DELIMITER_START).append(options.getLineBreak());
+        for (int i = 0; i < this.elements.size(); i++) {
+            stringBuilder.append(this.elements.get(i).stringify(options.withIncreasedIndentationLevel()));
+            if (i < this.elements.size() - 1) {
+                stringBuilder.append(DELIMITER_ELEMENTS);
+            }
+            stringBuilder.append(options.getLineBreak());
+        }
+        stringBuilder.append(options.getIndentation()).append(DELIMITER_END);
+        return stringBuilder.toString();
     }
 }

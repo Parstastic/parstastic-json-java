@@ -1,6 +1,7 @@
 package org.parstastic.jparstastic_json.node.null_node;
 
 import org.parstastic.jparstastic_json.node.JsonNode;
+import org.parstastic.jparstastic_json.node.StringifyOptions;
 
 /**
  * This class represents a <code>JSON</code> null node.
@@ -20,7 +21,7 @@ public class NullNode extends JsonNode {
     }
 
     @Override
-    public String stringify() {
-        return VALUE;
+    public String stringify(final StringifyOptions options) {
+        return options.getIndentation() + VALUE;
     }
 }

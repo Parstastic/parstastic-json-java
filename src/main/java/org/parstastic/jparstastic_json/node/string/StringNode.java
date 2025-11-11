@@ -1,6 +1,7 @@
 package org.parstastic.jparstastic_json.node.string;
 
 import org.parstastic.jparstastic_json.node.JsonNode;
+import org.parstastic.jparstastic_json.node.StringifyOptions;
 
 /**
  * This class represents a <code>JSON</code> string node.
@@ -28,8 +29,8 @@ public class StringNode extends JsonNode {
     }
 
     @Override
-    public String stringify() {
-        return DELIMITER + this.value + DELIMITER;
+    public String stringify(final StringifyOptions options) {
+        return options.getIndentation() + DELIMITER + this.value + DELIMITER;
     }
 
     /**

@@ -1,7 +1,8 @@
 package org.parstastic.jparstastic_json.node.object;
 
-import org.parstastic.jparstastic_json.node.JsonParticle;
 import org.parstastic.jparstastic_json.node.JsonNode;
+import org.parstastic.jparstastic_json.node.JsonParticle;
+import org.parstastic.jparstastic_json.node.StringifyOptions;
 import org.parstastic.jparstastic_json.node.string.StringNode;
 
 import java.util.List;
@@ -42,8 +43,8 @@ public class ObjectNode extends JsonNode {
         }
 
         @Override
-        public String stringify() {
-            return DELIMITER_KEY + key + DELIMITER_KEY + DELIMITER + value.toString();
+        public String stringify(final StringifyOptions options) {
+            return options.getIndentation() + DELIMITER_KEY + key + DELIMITER_KEY + DELIMITER + value.toString();
         }
     }
 
@@ -76,10 +77,17 @@ public class ObjectNode extends JsonNode {
     }
 
     @Override
-    public String stringify() {
-        final List<String> props = this.properties.stream()
-                .map(Object::toString)
-                .toList();
-        return DELIMITER_START + String.join(String.valueOf(DELIMITER_ELEMENTS), props) + DELIMITER_END;
+    public String stringify(final StringifyOptions options) {
+        final StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(options.getIndentation()).append(DELIMITER_START).append(options.getLineBreak());
+        for (int i = 0; i < this.properties.size(); i++) {
+            stringBuilder.append(this.properties.get(i).stringify(options.withIncreasedIndentationLevel()));
+            if (i < this.properties.size() - 1) {
+                stringBuilder.append(DELIMITER_ELEMENTS);
+            }
+            stringBuilder.append(options.getLineBreak());
+        }
+        stringBuilder.append(options.getIndentation()).append(DELIMITER_END);
+        return stringBuilder.toString();
     }
 }

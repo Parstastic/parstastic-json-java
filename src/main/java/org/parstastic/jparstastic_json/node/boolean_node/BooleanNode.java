@@ -1,6 +1,7 @@
 package org.parstastic.jparstastic_json.node.boolean_node;
 
 import org.parstastic.jparstastic_json.node.JsonNode;
+import org.parstastic.jparstastic_json.node.StringifyOptions;
 
 /**
  * This class represents a <code>JSON</code> boolean node.
@@ -56,7 +57,7 @@ public class BooleanNode extends JsonNode {
     }
 
     @Override
-    public String stringify() {
-        return this.value.toString();
+    public String stringify(final StringifyOptions options) {
+        return options.getIndentation() + this.value.toString();
     }
 }

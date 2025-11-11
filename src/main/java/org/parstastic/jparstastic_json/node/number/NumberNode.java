@@ -1,6 +1,7 @@
 package org.parstastic.jparstastic_json.node.number;
 
 import org.parstastic.jparstastic_json.node.JsonNode;
+import org.parstastic.jparstastic_json.node.StringifyOptions;
 
 /**
  * This class represents a <code>JSON</code> number node.
@@ -28,7 +29,7 @@ public class NumberNode extends JsonNode {
     }
 
     @Override
-    public String stringify() {
-        return this.value.toString();
+    public String stringify(final StringifyOptions options) {
+        return options.getIndentation() + this.value.toString();
     }
 }
