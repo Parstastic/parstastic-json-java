@@ -44,7 +44,7 @@ public class ObjectNode extends JsonNode {
 
         @Override
         public String stringify(final StringifyOptions options) {
-            return options.getIndentation() + DELIMITER_KEY + key + DELIMITER_KEY + DELIMITER + value.toString();
+            return options.getIndentation() + DELIMITER_KEY + key + DELIMITER_KEY + DELIMITER + value.stringify(options.skipFirstIndentation());
         }
     }
 
