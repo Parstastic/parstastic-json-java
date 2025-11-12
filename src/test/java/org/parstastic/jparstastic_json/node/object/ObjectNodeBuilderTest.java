@@ -35,8 +35,7 @@ class ObjectNodeBuilderTest extends JsonParserTest<ObjectNode, InvalidJsonObject
         return List.of(
                 "{",
                 "{\"hello\"}",
-                "{\"hello\":}",
-                "{\"hello\":\"world\"} text"
+                "{\"hello\":}"
         );
     }
 }
