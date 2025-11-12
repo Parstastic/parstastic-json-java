@@ -1,5 +1,6 @@
 package org.parstastic.jparstastic_json.node.object;
 
+import org.parstastic.jparstastic_json.node.CompositeNode;
 import org.parstastic.jparstastic_json.node.JsonNode;
 import org.parstastic.jparstastic_json.node.JsonParticle;
 import org.parstastic.jparstastic_json.node.StringifyOptions;
@@ -11,7 +12,7 @@ import java.util.List;
  * This class represents a <code>JSON</code> object node.
  * An example for such a node is {@code {"foo": "bar"}}.
  */
-public class ObjectNode extends JsonNode {
+public class ObjectNode extends CompositeNode<ObjectNode.ObjectNodeProperty> {
     /**
      * This class represents a <code>JSON</code> object node's property.
      * It is a key-value pair.
@@ -62,32 +63,26 @@ public class ObjectNode extends JsonNode {
     public static final char DELIMITER_ELEMENTS = ',';
 
     /**
-     * {@link List} containing the properties of the <code>JSON</code> object node.
-     */
-    private final List<ObjectNodeProperty> properties;
-
-    /**
      * Creates an {@link ObjectNode} object with the given {@code properties}.
      *
      * @param properties properties of the <code>JSON</code> object node
      */
     public ObjectNode(final List<ObjectNodeProperty> properties) {
-        super();
-        this.properties = properties;
+        super(properties);
     }
 
     @Override
-    public String stringify(final StringifyOptions options) {
-        final StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(options.getIndentation()).append(DELIMITER_START).append(options.getLineBreak());
-        for (int i = 0; i < this.properties.size(); i++) {
-            stringBuilder.append(this.properties.get(i).stringify(options.withIncreasedIndentationLevel()));
-            if (i < this.properties.size() - 1) {
-                stringBuilder.append(DELIMITER_ELEMENTS);
-            }
-            stringBuilder.append(options.getLineBreak());
-        }
-        stringBuilder.append(options.getIndentation()).append(DELIMITER_END);
-        return stringBuilder.toString();
+    public char getDelimiterStart() {
+        return DELIMITER_START;
+    }
+
+    @Override
+    public char getDelimiterEnd() {
+        return DELIMITER_END;
+    }
+
+    @Override
+    public char getDelimiterElements() {
+        return DELIMITER_ELEMENTS;
     }
 }
