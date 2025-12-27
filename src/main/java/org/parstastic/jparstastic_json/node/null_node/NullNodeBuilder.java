@@ -14,7 +14,7 @@ public class NullNodeBuilder extends JsonNodeFullTextMatchingBuilder<NullNode, I
      * Creates a {@link NullNodeBuilder} object.
      */
     public NullNodeBuilder() {
-        super(Set.of(NullNode.VALUE));
+        super(Set.of(NullNode.STRING_VALUE));
     }
 
     /**
