@@ -25,7 +25,7 @@ public class NullNodeBuilder extends JsonNodeFullTextMatchingBuilder<NullNode, I
      */
     @Override
     protected NullNode createNode(final String value) {
-        return new NullNode();
+        return NullNode.NULL_NODE;
     }
 
     /**

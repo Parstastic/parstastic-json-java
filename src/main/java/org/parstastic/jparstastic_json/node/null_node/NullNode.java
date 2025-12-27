@@ -16,10 +16,12 @@ public class NullNode extends JsonNode {
     public static final Object VALUE = null;
     public static final String STRING_VALUE = Objects.toString(VALUE);
 
+    public static final NullNode NULL_NODE = new NullNode();
+
     /**
      * Creates a {@link NullNode} object.
      */
-    public NullNode() {
+    private NullNode() {
         super();
     }
 
