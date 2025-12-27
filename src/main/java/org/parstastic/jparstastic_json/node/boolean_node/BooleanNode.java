@@ -37,7 +37,7 @@ public class BooleanNode extends JsonNode {
 
         @Override
         public String toString() {
-            return this.name().toLowerCase();
+            return Boolean.toString(this.value);
         }
     }
 
