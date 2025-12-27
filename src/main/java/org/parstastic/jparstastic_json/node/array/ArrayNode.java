@@ -1,7 +1,7 @@
 package org.parstastic.jparstastic_json.node.array;
 
 import org.parstastic.jparstastic_json.node.ContainerNode;
-import org.parstastic.jparstastic_json.node.JsonNode;
+import org.parstastic.jparstastic_json.node.JsonValue;
 import org.parstastic.jparstastic_json.node.Whitespace;
 
 import java.util.List;
@@ -10,7 +10,7 @@ import java.util.List;
  * This class represents a <code>JSON</code> array node.
  * An example for such a node is {@code [1, 2, 3]}.
  */
-public class ArrayNode extends ContainerNode<JsonNode> {
+public class ArrayNode extends ContainerNode<JsonValue> {
     /**
      * This is the delimiter used at the start of every <code>JSON</code> array node.
      */
@@ -28,7 +28,7 @@ public class ArrayNode extends ContainerNode<JsonNode> {
         super(whitespace);
     }
 
-    public ArrayNode(final List<JsonNode> elements) throws IllegalArgumentException {
+    public ArrayNode(final List<JsonValue> elements) throws IllegalArgumentException {
         super(elements);
     }
 

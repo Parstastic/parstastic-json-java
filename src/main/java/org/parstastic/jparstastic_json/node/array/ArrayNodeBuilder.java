@@ -1,6 +1,7 @@
 package org.parstastic.jparstastic_json.node.array;
 
 import org.parstastic.jparstastic_json.node.JsonNode;
+import org.parstastic.jparstastic_json.node.JsonValue;
 import org.parstastic.jparstastic_json.node.builders.JsonNodeWithInnerDelimitersBuilder;
 import org.parstastic.jparstastic_json.parser.FullStringJsonParser;
 import org.parstastic.jparstastic_json.parser.exceptions.InvalidJsonArrayNodeException;
@@ -24,7 +25,7 @@ public class ArrayNodeBuilder extends JsonNodeWithInnerDelimitersBuilder<ArrayNo
      */
     @Override
     protected ArrayNode createNode() {
-        return new ArrayNode(this.elements);
+        return new ArrayNode(this.elements.stream().map(e -> new JsonValue(null, e, null)).toList());
     }
 
     /**
