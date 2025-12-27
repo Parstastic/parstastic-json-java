@@ -27,7 +27,10 @@ public class BooleanNodeBuilder extends JsonNodeFullTextMatchingBuilder<BooleanN
      */
     @Override
     protected BooleanNode createNode(final BooleanValue value) {
-        return new BooleanNode(value);
+        return switch (value) {
+            case TRUE -> BooleanNode.TRUE;
+            case FALSE -> BooleanNode.FALSE;
+        };
     }
 
     /**

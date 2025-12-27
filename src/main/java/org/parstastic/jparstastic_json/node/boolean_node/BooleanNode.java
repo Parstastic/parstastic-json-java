@@ -41,6 +41,9 @@ public class BooleanNode extends JsonNode {
         }
     }
 
+    public static final BooleanNode TRUE = new BooleanNode(BooleanValue.TRUE);
+    public static final BooleanNode FALSE = new BooleanNode(BooleanValue.FALSE);
+
     /**
      * Value of the <code>JSON</code> boolean node
      */
@@ -51,7 +54,7 @@ public class BooleanNode extends JsonNode {
      *
      * @param value {@link BooleanValue} value
      */
-    public BooleanNode(final BooleanValue value) {
+    private BooleanNode(final BooleanValue value) {
         super();
         this.value = value;
     }
