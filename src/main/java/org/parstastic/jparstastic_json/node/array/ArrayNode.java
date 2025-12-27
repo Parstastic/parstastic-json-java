@@ -1,6 +1,6 @@
 package org.parstastic.jparstastic_json.node.array;
 
-import org.parstastic.jparstastic_json.node.CompositeNode;
+import org.parstastic.jparstastic_json.node.ContainerNode;
 import org.parstastic.jparstastic_json.node.JsonNode;
 
 import java.util.List;
@@ -9,7 +9,7 @@ import java.util.List;
  * This class represents a <code>JSON</code> array node.
  * An example for such a node is {@code [1, 2, 3]}.
  */
-public class ArrayNode extends CompositeNode<JsonNode> {
+public class ArrayNode extends ContainerNode<JsonNode> {
     /**
      * This is the delimiter used at the start of every <code>JSON</code> array node.
      */

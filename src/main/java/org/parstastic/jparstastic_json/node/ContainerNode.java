@@ -2,13 +2,13 @@ package org.parstastic.jparstastic_json.node;
 
 import java.util.List;
 
-public abstract class CompositeNode<P extends JsonParticle> extends JsonNode {
+public abstract class ContainerNode<P extends JsonParticle> extends JsonNode {
     /**
      * {@link List} containing all the elements of the <code>JSON</code> node.
      */
     private final List<P> elements;
 
-    protected CompositeNode(final List<P> elements) {
+    protected ContainerNode(final List<P> elements) {
         super();
         this.elements = elements;
     }

@@ -1,6 +1,6 @@
 package org.parstastic.jparstastic_json.node.object;
 
-import org.parstastic.jparstastic_json.node.CompositeNode;
+import org.parstastic.jparstastic_json.node.ContainerNode;
 import org.parstastic.jparstastic_json.node.JsonNode;
 import org.parstastic.jparstastic_json.node.JsonParticle;
 import org.parstastic.jparstastic_json.node.StringifyOptions;
@@ -12,7 +12,7 @@ import java.util.List;
  * This class represents a <code>JSON</code> object node.
  * An example for such a node is {@code {"foo": "bar"}}.
  */
-public class ObjectNode extends CompositeNode<ObjectNode.ObjectNodeProperty> {
+public class ObjectNode extends ContainerNode<ObjectNode.ObjectNodeProperty> {
     /**
      * This class represents a <code>JSON</code> object node's property.
      * It is a key-value pair.
