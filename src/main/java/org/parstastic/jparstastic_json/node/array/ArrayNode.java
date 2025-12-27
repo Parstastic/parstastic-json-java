@@ -2,6 +2,7 @@ package org.parstastic.jparstastic_json.node.array;
 
 import org.parstastic.jparstastic_json.node.ContainerNode;
 import org.parstastic.jparstastic_json.node.JsonNode;
+import org.parstastic.jparstastic_json.node.Whitespace;
 
 import java.util.List;
 
@@ -23,12 +24,11 @@ public class ArrayNode extends ContainerNode<JsonNode> {
      */
     public static final char DELIMITER_ELEMENTS = ',';
 
-    /**
-     * Creates an {@link ArrayNode} object with the given {@code elements}.
-     *
-     * @param elements elements of the <code>JSON</code> array node
-     */
-    public ArrayNode(final List<JsonNode> elements) {
+    public ArrayNode(final Whitespace whitespace) throws IllegalArgumentException {
+        super(whitespace);
+    }
+
+    public ArrayNode(final List<JsonNode> elements) throws IllegalArgumentException {
         super(elements);
     }
 

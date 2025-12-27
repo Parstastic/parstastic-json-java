@@ -3,14 +3,29 @@ package org.parstastic.jparstastic_json.node;
 import java.util.List;
 
 public abstract class ContainerNode<P extends JsonParticle> extends JsonNode {
+    protected final Whitespace whitespace;
     /**
      * {@link List} containing all the elements of the <code>JSON</code> node.
      */
-    private final List<P> elements;
+    protected final List<P> elements;
 
-    protected ContainerNode(final List<P> elements) {
+    private ContainerNode(final Whitespace whitespace, final List<P> elements) throws IllegalArgumentException {
         super();
+
+        if (whitespace == null && elements == null) {
+            throw new IllegalArgumentException();
+        }
+
+        this.whitespace = whitespace;
         this.elements = elements;
+    }
+
+    protected ContainerNode(final Whitespace whitespace) throws IllegalArgumentException {
+        this(whitespace, null);
+    }
+
+    protected ContainerNode(final List<P> elements) throws IllegalArgumentException {
+        this(null, elements);
     }
 
     @Override

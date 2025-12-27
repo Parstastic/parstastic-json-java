@@ -1,9 +1,6 @@
 package org.parstastic.jparstastic_json.node.object;
 
-import org.parstastic.jparstastic_json.node.ContainerNode;
-import org.parstastic.jparstastic_json.node.JsonNode;
-import org.parstastic.jparstastic_json.node.JsonParticle;
-import org.parstastic.jparstastic_json.node.StringifyOptions;
+import org.parstastic.jparstastic_json.node.*;
 import org.parstastic.jparstastic_json.node.string.StringNode;
 
 import java.util.List;
@@ -62,13 +59,12 @@ public class ObjectNode extends ContainerNode<ObjectNode.ObjectNodeProperty> {
      */
     public static final char DELIMITER_ELEMENTS = ',';
 
-    /**
-     * Creates an {@link ObjectNode} object with the given {@code properties}.
-     *
-     * @param properties properties of the <code>JSON</code> object node
-     */
-    public ObjectNode(final List<ObjectNodeProperty> properties) {
-        super(properties);
+    public ObjectNode(final Whitespace whitespace) throws IllegalArgumentException {
+        super(whitespace);
+    }
+
+    public ObjectNode(final List<ObjectNodeProperty> elements) throws IllegalArgumentException {
+        super(elements);
     }
 
     @Override
