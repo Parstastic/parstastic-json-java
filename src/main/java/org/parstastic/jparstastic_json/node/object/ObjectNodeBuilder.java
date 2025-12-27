@@ -76,14 +76,14 @@ public class ObjectNodeBuilder extends JsonNodeWithInnerDelimitersBuilder<Object
         }
 
         /**
-         * Validates the {@link ObjectNodeProperty#DELIMITER} at the given index of <code>JSON</code> {@link String}.
+         * Validates the {@link ObjectNodeProperty#KEY_VALUE_DELIMITER} at the given index of <code>JSON</code> {@link String}.
          * After successful validation, increments {@code index}.
          *
          * @param parsingProcess a <code>JSON</code> {@link String} parsing process
          * @throws InvalidJsonObjectNodePropertyException when the delimiter is not found
          */
         private void validateDelimiter(final JsonParsingProcess parsingProcess) throws InvalidJsonObjectNodePropertyException {
-            if (parsingProcess.isAtChar(ObjectNodeProperty.DELIMITER)) {
+            if (parsingProcess.isAtChar(ObjectNodeProperty.KEY_VALUE_DELIMITER)) {
                 parsingProcess.incrementIndex();
             } else {
                 throw createException();

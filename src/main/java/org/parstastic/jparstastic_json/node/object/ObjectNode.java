@@ -16,15 +16,9 @@ public class ObjectNode extends ContainerNode<ObjectNode.ObjectNodeProperty> {
      */
     public static class ObjectNodeProperty extends JsonParticle {
         /**
-         * This is the delimiter used before and after the key of every {@link ObjectNodeProperty}.
-         *
-         * @implNote equal to {@link StringNode#DELIMITER}
-         */
-        public static final char DELIMITER_KEY = StringNode.DELIMITER;
-        /**
          * This is the delimiter used between the key and the value of every {@link ObjectNodeProperty}.
          */
-        public static final char DELIMITER = ':';
+        public static final char KEY_VALUE_DELIMITER = ':';
 
         private final Whitespace leadingWhitespace;
         private final StringNode key;
