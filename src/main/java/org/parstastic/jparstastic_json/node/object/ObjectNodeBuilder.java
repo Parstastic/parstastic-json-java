@@ -1,7 +1,9 @@
 package org.parstastic.jparstastic_json.node.object;
 
 import org.parstastic.jparstastic_json.node.JsonNode;
+import org.parstastic.jparstastic_json.node.JsonValue;
 import org.parstastic.jparstastic_json.node.builders.JsonNodeWithInnerDelimitersBuilder;
+import org.parstastic.jparstastic_json.node.string.StringNode;
 import org.parstastic.jparstastic_json.node.string.StringNodeBuilder;
 import org.parstastic.jparstastic_json.parser.FullStringJsonParser;
 import org.parstastic.jparstastic_json.parser.JsonParser;
@@ -37,7 +39,7 @@ public class ObjectNodeBuilder extends JsonNodeWithInnerDelimitersBuilder<Object
 
             final JsonNode value = parseOrThrow(() -> parseValue(parsingProcess));
 
-            return new ObjectNodeProperty(key, value);
+            return new ObjectNodeProperty(null, new StringNode(key), null, new JsonValue(null, value, null));
         }
 
         /**

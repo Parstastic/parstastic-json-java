@@ -26,23 +26,25 @@ public class ObjectNode extends ContainerNode<ObjectNode.ObjectNodeProperty> {
          */
         public static final char DELIMITER = ':';
 
-        private final String key;
-        private final JsonNode value;
+        private final Whitespace leadingWhitespace;
+        private final StringNode key;
+        private final Whitespace trailingWhitespace;
+        private final JsonValue value;
 
-        /**
-         * Creates an {@link ObjectNodeProperty} object with specified key and value.
-         *
-         * @param key key of the property
-         * @param value value of the property
-         */
-        public ObjectNodeProperty(final String key, final JsonNode value) {
+        public ObjectNodeProperty(final Whitespace leadingWhitespace,
+                                   final StringNode key,
+                                   final Whitespace trailingWhitespace,
+                                   final JsonValue value) {
+            super();
+            this.leadingWhitespace = leadingWhitespace;
             this.key = key;
+            this.trailingWhitespace = trailingWhitespace;
             this.value = value;
         }
 
         @Override
         public String stringify(final StringifyOptions options) {
-            return options.getIndentation() + DELIMITER_KEY + key + DELIMITER_KEY + DELIMITER + value.stringify(options.skipFirstIndentation());
+            return options.getIndentation() + key + KEY_VALUE_DELIMITER + value.stringify(options.skipFirstIndentation());
         }
     }
 
