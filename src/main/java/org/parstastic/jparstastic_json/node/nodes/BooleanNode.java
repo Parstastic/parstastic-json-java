@@ -1,4 +1,4 @@
-package org.parstastic.jparstastic_json.node.boolean_node;
+package org.parstastic.jparstastic_json.node.nodes;
 
 import org.parstastic.jparstastic_json.node.JsonNode;
 import org.parstastic.jparstastic_json.node.StringifyOptions;
