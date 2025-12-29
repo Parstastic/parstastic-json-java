@@ -1,6 +1,6 @@
 package org.parstastic.jparstastic_json.parser.exceptions;
 
-import org.parstastic.jparstastic_json.node.null_node.NullNode;
+import org.parstastic.jparstastic_json.node.nodes.NullNode;
 
 /**
  * Exception thrown whenever there is a problem parsing a {@link NullNode}.
