@@ -1,6 +1,6 @@
 package org.parstastic.jparstastic_json;
 
-import org.parstastic.jparstastic_json.node.JsonNode;
+import org.parstastic.jparstastic_json.node.nodes.JsonNode;
 
 public final class JSON {
     private JSON() throws IllegalStateException {

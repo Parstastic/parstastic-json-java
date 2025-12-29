@@ -1,6 +1,5 @@
 package org.parstastic.jparstastic_json.node.nodes;
 
-import org.parstastic.jparstastic_json.node.JsonNode;
 import org.parstastic.jparstastic_json.node.JsonParticle;
 import org.parstastic.jparstastic_json.node.StringifyOptions;
 import org.parstastic.jparstastic_json.node.Whitespace;

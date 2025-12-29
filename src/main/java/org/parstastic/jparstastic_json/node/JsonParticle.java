@@ -1,5 +1,7 @@
 package org.parstastic.jparstastic_json.node;
 
+import org.parstastic.jparstastic_json.node.nodes.JsonNode;
+
 import static org.parstastic.jparstastic_json.node.nodes.ObjectNode.ObjectNodeProperty;
 
 /**
