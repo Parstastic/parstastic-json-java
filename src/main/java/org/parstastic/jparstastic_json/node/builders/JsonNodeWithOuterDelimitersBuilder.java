@@ -40,7 +40,7 @@ public abstract class JsonNodeWithOuterDelimitersBuilder<T extends JsonNode, E e
      * {@inheritDoc}
      *
      * <p>
-     * This {@link JsonNodeWithInnerDelimitersBuilder} can parse a <code>JSON</code> {@link String}
+     * This {@link JsonNodeWithOuterDelimitersBuilder} can parse a <code>JSON</code> {@link String}
      * if the character at starting index is {@link #startDelimiter}.
      * </p>
      */
