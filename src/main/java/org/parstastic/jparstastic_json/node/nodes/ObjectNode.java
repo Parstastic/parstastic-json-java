@@ -1,7 +1,6 @@
 package org.parstastic.jparstastic_json.node.nodes;
 
 import org.parstastic.jparstastic_json.node.*;
-import org.parstastic.jparstastic_json.node.string.StringNode;
 
 import java.util.List;
 
