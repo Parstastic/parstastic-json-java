@@ -1,7 +1,6 @@
 package org.parstastic.jparstastic_json;
 
 import org.parstastic.jparstastic_json.node.JsonNode;
-import org.parstastic.jparstastic_json.parser.FullStringJsonParser;
 
 public final class JSON {
     private JSON() throws IllegalStateException {
@@ -13,6 +12,6 @@ public final class JSON {
     }
 
     public static JsonNode parse(final String json) {
-        return new FullStringJsonParser().parseJson(json);
+        throw new UnsupportedOperationException();
     }
 }
