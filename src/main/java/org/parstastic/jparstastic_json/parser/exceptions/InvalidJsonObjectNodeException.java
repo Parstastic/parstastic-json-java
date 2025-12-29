@@ -1,6 +1,6 @@
 package org.parstastic.jparstastic_json.parser.exceptions;
 
-import org.parstastic.jparstastic_json.node.object.ObjectNode;
+import org.parstastic.jparstastic_json.node.nodes.ObjectNode;
 
 /**
  * Exception thrown whenever there is a problem parsing an {@link ObjectNode}.

@@ -1,6 +1,6 @@
 package org.parstastic.jparstastic_json.node;
 
-import static org.parstastic.jparstastic_json.node.object.ObjectNode.ObjectNodeProperty;
+import static org.parstastic.jparstastic_json.node.nodes.ObjectNode.ObjectNodeProperty;
 
 /**
  * This abstract class represents anything that can be part of a <code>JSON</code> {@link String}.
