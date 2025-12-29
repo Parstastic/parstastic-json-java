@@ -1,7 +1,5 @@
 package org.parstastic.jparstastic_json.parser;
 
-import org.parstastic.jparstastic_json.parser.exceptions.JsonParsingProcessException;
-
 import java.util.function.Predicate;
 
 /**
@@ -38,13 +36,13 @@ public class JsonParsingProcess {
      * Returns the character at index {@link #index} in <code>JSON</code> {@link String} {@link #json}.
      *
      * @return character at index {@link #index} in <code>JSON</code> {@link String} {@link #json}
-     * @throws JsonParsingProcessException if {@link #index} is outside <code>JSON</code> {@link String} {@link #json}
+     * @throws IndexOutOfBoundsException if {@link #index} is outside <code>JSON</code> {@link String} {@link #json}
      */
-    public char getChar() throws JsonParsingProcessException {
+    public char getChar() throws IndexOutOfBoundsException {
         if (isIndexInJson()) {
             return this.json.charAt(this.index);
         }
-        throw new JsonParsingProcessException();
+        throw new IndexOutOfBoundsException();
     }
 
     /**
