@@ -1,4 +1,4 @@
-package org.parstastic.jparstastic_json.node.array;
+package org.parstastic.jparstastic_json.node.nodes;
 
 import org.parstastic.jparstastic_json.node.ContainerNode;
 import org.parstastic.jparstastic_json.node.JsonValue;
