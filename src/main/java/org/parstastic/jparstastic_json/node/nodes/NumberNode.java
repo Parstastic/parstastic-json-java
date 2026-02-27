@@ -30,6 +30,7 @@ public class NumberNode extends JsonNode {
         }
     }
 
+    public static final char NEGATIVE_NUMBER_PREFIX = '-';
     /**
      * Character delimiter between the integer and decimal parts of the <code>JSON</code> number node.
      */
