@@ -7,8 +7,14 @@ public class JsonValue extends JsonParticle {
     private final JsonNode jsonNode;
     private final Whitespace trailingWhitespace;
 
-    public JsonValue(final Whitespace leadingWhitespace, final JsonNode jsonNode, final Whitespace trailingWhitespace) {
+    public JsonValue(final Whitespace leadingWhitespace, final JsonNode jsonNode, final Whitespace trailingWhitespace)
+            throws JsonParticleInstantiationException {
         super();
+
+        validateNotNullOrThrowInstantiationException(leadingWhitespace, "leadingWhitespace");
+        validateNotNullOrThrowInstantiationException(jsonNode, "jsonNode");
+        validateNotNullOrThrowInstantiationException(trailingWhitespace, "trailingWhitespace");
+
         this.leadingWhitespace = leadingWhitespace;
         this.jsonNode = jsonNode;
         this.trailingWhitespace = trailingWhitespace;
