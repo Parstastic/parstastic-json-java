@@ -1,5 +1,6 @@
 package org.parstastic.jparstastic_json.node.nodes;
 
+import org.parstastic.jparstastic_json.node.JsonParticleInstantiationException;
 import org.parstastic.jparstastic_json.node.StringifyOptions;
 
 /**
@@ -22,8 +23,11 @@ public class StringNode extends JsonNode {
      *
      * @param value text of the <code>JSON</code> string node
      */
-    public StringNode(final String value) {
+    public StringNode(final String value) throws JsonParticleInstantiationException {
         super();
+
+        validateNotNullOrThrowInstantiationException(value, "value");
+
         this.value = value;
     }
 
