@@ -91,7 +91,23 @@ public class NumberNode extends JsonNode {
 
     @Override
     public String stringify(final StringifyOptions options) {
-        return this.value.toString();
+        final StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder.append(this.value.toString());
+
+        if (this.hasExponent) {
+            if (this.isExponentCapitalized) {
+                stringBuilder.append(EXPONENT_SYMBOL_CAPITALIZED);
+            } else {
+                stringBuilder.append(EXPONENT_SYMBOL);
+            }
+
+            stringBuilder.append(this.exponentSign.getSymbol());
+
+            stringBuilder.append(this.exponent);
+        }
+
+        return stringBuilder.toString();
     }
 
     public double getNumericValue() {
