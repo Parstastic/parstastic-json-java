@@ -25,10 +25,17 @@ public class ObjectNode extends ContainerNode<ObjectNode.ObjectNodeProperty> {
         private final JsonValue value;
 
         public ObjectNodeProperty(final Whitespace leadingWhitespace,
-                                   final StringNode key,
-                                   final Whitespace trailingWhitespace,
-                                   final JsonValue value) {
+                                  final StringNode key,
+                                  final Whitespace trailingWhitespace,
+                                  final JsonValue value)
+                throws JsonParticleInstantiationException {
             super();
+
+            validateNotNullOrThrowInstantiationException(leadingWhitespace, "leadingWhitespace");
+            validateNotNullOrThrowInstantiationException(key, "key");
+            validateNotNullOrThrowInstantiationException(trailingWhitespace, "trailingWhitespace");
+            validateNotNullOrThrowInstantiationException(value, "value");
+
             this.leadingWhitespace = leadingWhitespace;
             this.key = key;
             this.trailingWhitespace = trailingWhitespace;
