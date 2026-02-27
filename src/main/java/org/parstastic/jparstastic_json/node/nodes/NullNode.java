@@ -26,6 +26,6 @@ public class NullNode extends JsonNode {
 
     @Override
     public String stringify(final StringifyOptions options) {
-        return options.getIndentation() + VALUE;
+        return STRING_VALUE;
     }
 }
