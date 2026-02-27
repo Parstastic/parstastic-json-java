@@ -75,7 +75,7 @@ public class NumberNode extends JsonNode {
 
     @Override
     public String stringify(final StringifyOptions options) {
-        return options.getIndentation() + this.value.toString();
+        return this.value.toString();
     }
 
     public double getNumericValue() {
