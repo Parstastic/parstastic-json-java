@@ -3,6 +3,8 @@ package org.parstastic.jparstastic_json.node.nodes;
 import org.parstastic.jparstastic_json.node.JsonParticleInstantiationException;
 import org.parstastic.jparstastic_json.node.StringifyOptions;
 
+import java.util.Set;
+
 /**
  * This class represents a <code>JSON</code> boolean node.
  * An example for such a node is {@code true}.
@@ -43,11 +45,16 @@ public class BooleanNode extends JsonNode {
 
     public static final BooleanNode TRUE;
     public static final BooleanNode FALSE;
+    public static final Set<BooleanNode> VALUES;
 
     static {
         try {
             TRUE = new BooleanNode(BooleanValue.TRUE);
             FALSE = new BooleanNode(BooleanValue.FALSE);
+            VALUES = Set.of(
+                    TRUE,
+                    FALSE
+            );
         } catch (final JsonParticleInstantiationException e) {
             throw new RuntimeException(e);
         }
