@@ -19,6 +19,17 @@ public abstract class JsonParticle {
         super();
     }
 
+    protected void validateNotNullOrThrowInstantiationException(final Object parameterValue, final String parameterName)
+            throws JsonParticleInstantiationException {
+        if (parameterValue == null) {
+            throwInstantiationException("The parameter \"" + parameterName + "\" may not be \"null\".");
+        }
+    }
+
+    protected void throwInstantiationException(final String message) throws JsonParticleInstantiationException {
+        throw new JsonParticleInstantiationException(message);
+    }
+
     /**
      * Creates the <code>JSON</code> {@link String} representation of this {@link JsonParticle} object with {@link StringifyOptions#DEFAULT_STRINGIFY_OPTIONS}.
      *
