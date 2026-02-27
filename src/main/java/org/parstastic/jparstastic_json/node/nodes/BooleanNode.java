@@ -1,5 +1,6 @@
 package org.parstastic.jparstastic_json.node.nodes;
 
+import org.parstastic.jparstastic_json.node.JsonParticleInstantiationException;
 import org.parstastic.jparstastic_json.node.StringifyOptions;
 
 /**
@@ -40,8 +41,17 @@ public class BooleanNode extends JsonNode {
         }
     }
 
-    public static final BooleanNode TRUE = new BooleanNode(BooleanValue.TRUE);
-    public static final BooleanNode FALSE = new BooleanNode(BooleanValue.FALSE);
+    public static final BooleanNode TRUE;
+    public static final BooleanNode FALSE;
+
+    static {
+        try {
+            TRUE = new BooleanNode(BooleanValue.TRUE);
+            FALSE = new BooleanNode(BooleanValue.FALSE);
+        } catch (final JsonParticleInstantiationException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     /**
      * Value of the <code>JSON</code> boolean node
@@ -53,8 +63,11 @@ public class BooleanNode extends JsonNode {
      *
      * @param value {@link BooleanValue} value
      */
-    private BooleanNode(final BooleanValue value) {
+    private BooleanNode(final BooleanValue value) throws JsonParticleInstantiationException {
         super();
+
+        validateNotNullOrThrowInstantiationException(value, "value");
+
         this.value = value;
     }
 
