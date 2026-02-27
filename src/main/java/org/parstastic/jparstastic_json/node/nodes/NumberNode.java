@@ -9,14 +9,20 @@ import org.parstastic.jparstastic_json.node.StringifyOptions;
  */
 public class NumberNode extends JsonNode {
     public enum NumberNodeExponentSignSymbol {
-        BLANK(1),
-        PLUS(1),
-        MINUS(-1);
+        BLANK("", 1),
+        PLUS("+", 1),
+        MINUS("-", -1);
 
+        private final String symbol;
         private final int value;
 
-        NumberNodeExponentSignSymbol(final int value) {
+        NumberNodeExponentSignSymbol(final String symbol, final int value) {
+            this.symbol = symbol;
             this.value = value;
+        }
+
+        public String getSymbol() {
+            return this.symbol;
         }
 
         public int getValue() {
