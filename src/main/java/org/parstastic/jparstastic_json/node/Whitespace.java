@@ -28,8 +28,17 @@ public class Whitespace extends JsonParticle {
 
     private final String value;
 
-    public Whitespace(final String value) {
+    public Whitespace(final String value) throws JsonParticleInstantiationException {
         super();
+
+        validateNotNullOrThrowInstantiationException(value, "value");
+
+        for (final char c : value.toCharArray()) {
+            if (!WhitespaceCharacter.isWhitespaceCharacter(c)) {
+                throwInstantiationException("The character \"" + c + "\" is not a valid whitespace character.");
+            }
+        }
+
         this.value = value;
     }
 
