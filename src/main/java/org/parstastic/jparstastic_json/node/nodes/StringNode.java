@@ -29,7 +29,7 @@ public class StringNode extends JsonNode {
 
     @Override
     public String stringify(final StringifyOptions options) {
-        return options.getIndentation() + DELIMITER + this.value + DELIMITER;
+        return DELIMITER + this.value + DELIMITER;
     }
 
     /**
