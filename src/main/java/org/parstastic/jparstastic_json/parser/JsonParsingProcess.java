@@ -48,10 +48,7 @@ public class JsonParsingProcess {
      * @throws IndexOutOfBoundsException if {@link #index} is outside <code>JSON</code> {@link String} {@link #json}
      */
     public char getChar() throws IndexOutOfBoundsException {
-        if (isIndexInJson()) {
-            return this.json.charAt(this.index);
-        }
-        throw new IndexOutOfBoundsException();
+        return this.json.charAt(this.index);
     }
 
     /**
