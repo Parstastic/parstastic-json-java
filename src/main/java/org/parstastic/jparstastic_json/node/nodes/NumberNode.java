@@ -1,5 +1,6 @@
 package org.parstastic.jparstastic_json.node.nodes;
 
+import org.parstastic.jparstastic_json.node.JsonParticleInstantiationException;
 import org.parstastic.jparstastic_json.node.StringifyOptions;
 
 /**
@@ -44,14 +45,15 @@ public class NumberNode extends JsonNode {
      *
      * @param value numeric value of the <code>JSON</code> number node
      */
-    public NumberNode(final Number value) throws IllegalArgumentException {
+    public NumberNode(final Number value) throws JsonParticleInstantiationException {
         this(value, false, false, null, 0);
     }
 
     public NumberNode(final Number value,
                       final boolean isExponentCapitalized,
                       final NumberNodeExponentSignSymbol exponentSign,
-                      final long exponent) throws IllegalArgumentException {
+                      final long exponent)
+            throws JsonParticleInstantiationException {
         this(value, true, isExponentCapitalized, exponentSign, exponent);
     }
 
@@ -59,11 +61,18 @@ public class NumberNode extends JsonNode {
                        final boolean hasExponent,
                        final boolean isExponentCapitalized,
                        final NumberNodeExponentSignSymbol exponentSign,
-                       final long exponent) throws IllegalArgumentException {
+                       final long exponent)
+            throws JsonParticleInstantiationException {
         super();
 
-        if (value == null || exponent < 0) {
-            throw new IllegalArgumentException();
+        validateNotNullOrThrowInstantiationException(value, "value");
+
+        if (exponent < 0) {
+            throwInstantiationException("Exponent may not be negative.");
+        }
+
+        if (hasExponent && exponentSign == null) {
+            throwInstantiationException("If an exponent is present, \"exponentSign\" may not be null.");
         }
 
         this.value = value;
