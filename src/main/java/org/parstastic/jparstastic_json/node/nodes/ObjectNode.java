@@ -54,11 +54,11 @@ public class ObjectNode extends ContainerNode<ObjectNode.ObjectNodeProperty> {
      */
     public static final char DELIMITER_ELEMENTS = ',';
 
-    public ObjectNode(final Whitespace whitespace) throws IllegalArgumentException {
+    public ObjectNode(final Whitespace whitespace) throws JsonParticleInstantiationException {
         super(whitespace);
     }
 
-    public ObjectNode(final List<ObjectNodeProperty> elements) throws IllegalArgumentException {
+    public ObjectNode(final List<ObjectNodeProperty> elements) throws JsonParticleInstantiationException {
         super(elements);
     }
 

@@ -1,5 +1,6 @@
 package org.parstastic.jparstastic_json.node.nodes;
 
+import org.parstastic.jparstastic_json.node.JsonParticleInstantiationException;
 import org.parstastic.jparstastic_json.node.JsonValue;
 import org.parstastic.jparstastic_json.node.Whitespace;
 
@@ -23,11 +24,11 @@ public class ArrayNode extends ContainerNode<JsonValue> {
      */
     public static final char DELIMITER_ELEMENTS = ',';
 
-    public ArrayNode(final Whitespace whitespace) throws IllegalArgumentException {
+    public ArrayNode(final Whitespace whitespace) throws JsonParticleInstantiationException {
         super(whitespace);
     }
 
-    public ArrayNode(final List<JsonValue> elements) throws IllegalArgumentException {
+    public ArrayNode(final List<JsonValue> elements) throws JsonParticleInstantiationException {
         super(elements);
     }
 
