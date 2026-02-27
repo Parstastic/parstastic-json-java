@@ -15,14 +15,23 @@ public class JsonParsingProcess {
      */
     private int index;
 
+    private JsonParsingProcess(final String json, final int index) {
+        super();
+        this.json = json;
+        this.index = index;
+    }
+
     /**
      * Creates a {@link JsonParsingProcess} object with a given <code>JSON</code> {@link String} and initializes {@link #index} to {@code 0}.
      *
      * @param json <code>JSON</code> {@link String}
      */
-    JsonParsingProcess(final String json) {
-        this.json = json;
-        this.index = 0;
+    public JsonParsingProcess(final String json) {
+        this(json, 0);
+    }
+
+    public JsonParsingProcess(final JsonParsingProcess parsingProcess) {
+        this(parsingProcess.json, parsingProcess.index);
     }
 
     /**
