@@ -35,7 +35,7 @@ public class Whitespace extends JsonParticle {
 
     @Override
     public String stringify(final StringifyOptions options) {
-        return options.getIndentation() + this.value;
+        return this.value;
     }
 
     public String getValue() {
