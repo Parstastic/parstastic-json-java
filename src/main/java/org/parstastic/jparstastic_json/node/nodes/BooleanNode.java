@@ -82,4 +82,8 @@ public class BooleanNode extends JsonNode {
     public String stringify(final StringifyOptions options) {
         return this.value.toString();
     }
+
+    public boolean hasValue(final BooleanValue value) {
+        return this.value == value;
+    }
 }
