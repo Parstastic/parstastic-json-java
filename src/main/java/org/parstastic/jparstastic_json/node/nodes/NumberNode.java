@@ -53,7 +53,7 @@ public class NumberNode extends JsonNode {
      * @param value numeric value of the <code>JSON</code> number node
      */
     public NumberNode(final Number value) throws JsonParticleInstantiationException {
-        this(value, false, false, null, 0);
+        this(value, false, false, null, 1);
     }
 
     public NumberNode(final Number value,
