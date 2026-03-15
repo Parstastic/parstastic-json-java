@@ -48,7 +48,7 @@ public abstract class JsonParticle {
     public abstract String stringify(final StringifyOptions options);
 
     @Override
-    public String toString() {
+    public final String toString() {
         return this.stringify();
     }
 }
