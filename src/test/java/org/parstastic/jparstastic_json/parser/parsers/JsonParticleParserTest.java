@@ -12,6 +12,7 @@ import org.parstastic.jparstastic_json.node.JsonParticleInstantiationException;
 import org.parstastic.jparstastic_json.parser.JsonParsingResult;
 
 import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -24,6 +25,17 @@ public abstract class JsonParticleParserTest {
     protected abstract Map<String, JsonParticle> getValidTargets() throws JsonParticleInstantiationException;
 
     protected abstract Map<String, JsonParsingResult.JsonParsingResultError> getInvalidTargets();
+
+    @SafeVarargs
+    protected final <T, U> Map<T, U> mergeMaps(final Map<T, U>... maps) {
+        return Stream.of(maps)
+                .flatMap(m -> m.entrySet().stream())
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (v1, v2) -> v2
+                ));
+    }
 
     static class ValidTargetsSource implements ArgumentsProvider {
         @Override
