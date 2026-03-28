@@ -8,6 +8,7 @@ import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 import org.junit.jupiter.params.support.ParameterDeclarations;
 import org.parstastic.jparstastic_json.node.JsonParticle;
+import org.parstastic.jparstastic_json.node.JsonParticleInstantiationException;
 import org.parstastic.jparstastic_json.parser.JsonParsingResult;
 
 import java.util.Map;
@@ -20,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 public abstract class JsonParticleParserTest {
     protected abstract JsonParticleParser<?> getInstance();
 
-    protected abstract Map<String, JsonParticle> getValidTargets();
+    protected abstract Map<String, JsonParticle> getValidTargets() throws JsonParticleInstantiationException;
 
     protected abstract Map<String, JsonParsingResult.JsonParsingResultError> getInvalidTargets();
 
@@ -29,7 +30,7 @@ public abstract class JsonParticleParserTest {
         public Stream<? extends Arguments> provideArguments(
                 final ParameterDeclarations parameters,
                 final ExtensionContext context
-        ) {
+        ) throws JsonParticleInstantiationException {
             final JsonParticleParserTest test = (JsonParticleParserTest) context.getRequiredTestInstance();
             return test.getValidTargets().entrySet().stream()
                     .map(Arguments::of);
