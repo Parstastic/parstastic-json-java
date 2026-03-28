@@ -22,6 +22,8 @@ public class JsonValue extends JsonParticle {
 
     @Override
     public String stringify(final StringifyOptions options) {
-        return this.jsonNode.stringify(options);
+        return options.getJsonValueLeadingWhitespace(this.leadingWhitespace).stringify(options) +
+                this.jsonNode.stringify(options) +
+                options.getJsonValueTrailingWhitespace(this.trailingWhitespace).stringify(options);
     }
 }

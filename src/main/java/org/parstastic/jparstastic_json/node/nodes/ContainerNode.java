@@ -38,16 +38,27 @@ public abstract class ContainerNode<P extends JsonParticle> extends JsonNode {
 
     @Override
     public String stringify(final StringifyOptions options) {
+        final StringifyOptions optionsForThisNode = options.forContainerNode(this);
         final StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(options.getIndentation()).append(getDelimiterStart()).append(options.getLineBreak());
-        for (int i = 0; i < this.elements.size(); i++) {
-            stringBuilder.append(this.elements.get(i).stringify(options.withIncreasedIndentationLevel()));
-            if (i < this.elements.size() - 1) {
-                stringBuilder.append(getDelimiterElements());
+        stringBuilder.append(getDelimiterStart());
+        if (this.elements != null) {
+            for (int i = 0; i < this.elements.size(); i++) {
+                final boolean isLastElement = i == this.elements.size() - 1;
+                final StringifyOptions optionsForThisElement = isLastElement
+                        ? options.forContainerNode(this, true)
+                        : optionsForThisNode
+                        ;
+                stringBuilder.append(this.elements.get(i).stringify(optionsForThisElement));
+                if (i < this.elements.size() - 1) {
+                    stringBuilder.append(getDelimiterElements());
+                }
             }
-            stringBuilder.append(options.getLineBreak());
+        } else {
+            stringBuilder.append(
+                    optionsForThisNode.getContainerNodeWhitespace(this.whitespace).stringify(optionsForThisNode)
+            );
         }
-        stringBuilder.append(options.getIndentation()).append(getDelimiterEnd());
+        stringBuilder.append(getDelimiterEnd());
         return stringBuilder.toString();
     }
 

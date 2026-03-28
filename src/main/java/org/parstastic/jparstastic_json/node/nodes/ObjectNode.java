@@ -44,7 +44,11 @@ public class ObjectNode extends ContainerNode<ObjectNode.ObjectNodeProperty> {
 
         @Override
         public String stringify(final StringifyOptions options) {
-            return options.getIndentation() + key + KEY_VALUE_DELIMITER + value.stringify(options.skipFirstIndentation());
+            return options.getObjectNodePropertyLeadingWhitespace(this.leadingWhitespace).stringify(options) +
+                    key +
+                    options.getObjectNodePropertyTrailingWhitespace(this.trailingWhitespace).stringify(options) +
+                    KEY_VALUE_DELIMITER +
+                    value.stringify(options);
         }
     }
 
