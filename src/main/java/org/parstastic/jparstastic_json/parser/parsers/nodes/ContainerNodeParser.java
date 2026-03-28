@@ -61,10 +61,10 @@ public abstract class ContainerNodeParser<P extends JsonParticle, J extends Cont
                 new WhileLoopStep(
                         new BlockStep(
                                 new ParseCharacterStep(c -> true),
-                                new ParseStep<>(
+                                new StepCreationStep(() -> new ParseStep<>(
                                         getElementParser(),
                                         element -> new ExportStep(() -> this.elements.add(element))
-                                )
+                                ))
                         ),
                         p -> p.isAtChar(getElementDelimiter())
                 )
