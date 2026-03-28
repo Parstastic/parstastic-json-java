@@ -15,6 +15,10 @@ public abstract class JsonParticleParser<J extends JsonParticle> {
         super();
     }
 
+    public final boolean canParse(final String json) {
+        return canParse(new JsonParsingProcess(json));
+    }
+
     public abstract boolean canParse(final JsonParsingProcess parsingProcess);
 
     public final JsonParsingResult<J> parse(final String json) {
