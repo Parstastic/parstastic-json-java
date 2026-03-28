@@ -37,46 +37,86 @@ public abstract class JsonParticleParserTest {
                 ));
     }
 
-    static class ValidTargetsSource implements ArgumentsProvider {
+    protected Map<String, JsonParticle> getCanParseValidTargets() throws JsonParticleInstantiationException {
+        return getValidTargets();
+    }
+
+    static class CanParseValidTargetsSource implements ArgumentsProvider {
         @Override
         public Stream<? extends Arguments> provideArguments(
                 final ParameterDeclarations parameters,
                 final ExtensionContext context
         ) throws JsonParticleInstantiationException {
             final JsonParticleParserTest test = (JsonParticleParserTest) context.getRequiredTestInstance();
-            return test.getValidTargets().entrySet().stream()
+            return test.getCanParseValidTargets().entrySet().stream()
                     .map(Arguments::of);
         }
     }
 
-    static class InvalidTargetsSource implements ArgumentsProvider {
+    protected Map<String, JsonParsingResult.JsonParsingResultError> getCanParseInvalidTargets() {
+        return getInvalidTargets();
+    }
+
+    static class CanParseInvalidTargetsSource implements ArgumentsProvider {
         @Override
         public Stream<? extends Arguments> provideArguments(
                 final ParameterDeclarations parameters,
                 final ExtensionContext context
         ) {
             final JsonParticleParserTest test = (JsonParticleParserTest) context.getRequiredTestInstance();
-            return test.getInvalidTargets().entrySet().stream()
+            return test.getCanParseInvalidTargets().entrySet().stream()
                     .map(Arguments::of);
         }
     }
 
     @ParameterizedTest
-    @ArgumentsSource(ValidTargetsSource.class)
+    @ArgumentsSource(CanParseValidTargetsSource.class)
     void canParse_true(final Map.Entry<String, JsonParticle> validTarget) {
         assertThat(getInstance().canParse(validTarget.getKey()))
                 .isTrue();
     }
 
     @ParameterizedTest
-    @ArgumentsSource(InvalidTargetsSource.class)
+    @ArgumentsSource(CanParseInvalidTargetsSource.class)
     void canParse_false(final Map.Entry<String, JsonParsingResult.JsonParsingResultError> invalidTarget) {
         assertThat(getInstance().canParse(invalidTarget.getKey()))
                 .isFalse();
     }
 
+    protected Map<String, JsonParticle> getParseValidTargets() throws JsonParticleInstantiationException {
+        return getValidTargets();
+    }
+
+    static class ParseValidTargetsSource implements ArgumentsProvider {
+        @Override
+        public Stream<? extends Arguments> provideArguments(
+                final ParameterDeclarations parameters,
+                final ExtensionContext context
+        ) throws JsonParticleInstantiationException {
+            final JsonParticleParserTest test = (JsonParticleParserTest) context.getRequiredTestInstance();
+            return test.getParseValidTargets().entrySet().stream()
+                    .map(Arguments::of);
+        }
+    }
+
+    protected Map<String, JsonParsingResult.JsonParsingResultError> getParseInvalidTargets() {
+        return getInvalidTargets();
+    }
+
+    static class ParseInvalidTargetsSource implements ArgumentsProvider {
+        @Override
+        public Stream<? extends Arguments> provideArguments(
+                final ParameterDeclarations parameters,
+                final ExtensionContext context
+        ) {
+            final JsonParticleParserTest test = (JsonParticleParserTest) context.getRequiredTestInstance();
+            return test.getParseInvalidTargets().entrySet().stream()
+                    .map(Arguments::of);
+        }
+    }
+
     @ParameterizedTest
-    @ArgumentsSource(ValidTargetsSource.class)
+    @ArgumentsSource(ParseValidTargetsSource.class)
     void parse_success(final Map.Entry<String, JsonParticle> validTarget)
             throws JsonParsingResult.JsonParsingResultNoSuchElementException {
         final JsonParsingResult<?> result = getInstance().parse(validTarget.getKey());
@@ -89,7 +129,7 @@ public abstract class JsonParticleParserTest {
     }
 
     @ParameterizedTest
-    @ArgumentsSource(InvalidTargetsSource.class)
+    @ArgumentsSource(ParseInvalidTargetsSource.class)
     void parse_failure(final Map.Entry<String, JsonParsingResult.JsonParsingResultError> invalidTarget)
             throws JsonParsingResult.JsonParsingResultNoSuchElementException {
         final JsonParsingResult<?> result = getInstance().parse(invalidTarget.getKey());
