@@ -20,6 +20,26 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public abstract class JsonParticleParserTest {
+    interface ThrowingFunction<T, R, E extends Exception> {
+        R apply(T t) throws E;
+    }
+
+    private static Stream<Arguments> buildArgs(
+            final ExtensionContext context,
+            final ThrowingFunction<JsonParticleParserTest, Map<?, ?>, JsonParticleInstantiationException> transformer
+    ) throws JsonParticleInstantiationException {
+        final JsonParticleParserTest test = (JsonParticleParserTest) context.getRequiredTestInstance();
+        final Map<?, ?> map = transformer.apply(test);
+        if (map.isEmpty()) {
+            return Stream.of(
+                    Arguments.of((Object) null)
+            );
+        } else {
+            return map.entrySet().stream()
+                    .map(Arguments::of);
+        }
+    }
+
     protected abstract JsonParticleParser<?> getInstance();
 
     protected abstract Map<String, JsonParticle> getValidTargets() throws JsonParticleInstantiationException;
@@ -47,9 +67,7 @@ public abstract class JsonParticleParserTest {
                 final ParameterDeclarations parameters,
                 final ExtensionContext context
         ) throws JsonParticleInstantiationException {
-            final JsonParticleParserTest test = (JsonParticleParserTest) context.getRequiredTestInstance();
-            return test.getCanParseValidTargets().entrySet().stream()
-                    .map(Arguments::of);
+            return buildArgs(context, JsonParticleParserTest::getCanParseValidTargets);
         }
     }
 
@@ -62,16 +80,18 @@ public abstract class JsonParticleParserTest {
         public Stream<? extends Arguments> provideArguments(
                 final ParameterDeclarations parameters,
                 final ExtensionContext context
-        ) {
-            final JsonParticleParserTest test = (JsonParticleParserTest) context.getRequiredTestInstance();
-            return test.getCanParseInvalidTargets().entrySet().stream()
-                    .map(Arguments::of);
+        ) throws JsonParticleInstantiationException {
+            return buildArgs(context, JsonParticleParserTest::getCanParseInvalidTargets);
         }
     }
 
     @ParameterizedTest
     @ArgumentsSource(CanParseValidTargetsSource.class)
     void canParse_true(final Map.Entry<String, JsonParticle> validTarget) {
+        if (validTarget == null) {
+            return;
+        }
+
         assertThat(getInstance().canParse(validTarget.getKey()))
                 .isTrue();
     }
@@ -79,6 +99,10 @@ public abstract class JsonParticleParserTest {
     @ParameterizedTest
     @ArgumentsSource(CanParseInvalidTargetsSource.class)
     void canParse_false(final Map.Entry<String, JsonParsingResult.JsonParsingResultError> invalidTarget) {
+        if (invalidTarget == null) {
+            return;
+        }
+
         assertThat(getInstance().canParse(invalidTarget.getKey()))
                 .isFalse();
     }
@@ -93,9 +117,7 @@ public abstract class JsonParticleParserTest {
                 final ParameterDeclarations parameters,
                 final ExtensionContext context
         ) throws JsonParticleInstantiationException {
-            final JsonParticleParserTest test = (JsonParticleParserTest) context.getRequiredTestInstance();
-            return test.getParseValidTargets().entrySet().stream()
-                    .map(Arguments::of);
+            return buildArgs(context, JsonParticleParserTest::getParseValidTargets);
         }
     }
 
@@ -108,10 +130,8 @@ public abstract class JsonParticleParserTest {
         public Stream<? extends Arguments> provideArguments(
                 final ParameterDeclarations parameters,
                 final ExtensionContext context
-        ) {
-            final JsonParticleParserTest test = (JsonParticleParserTest) context.getRequiredTestInstance();
-            return test.getParseInvalidTargets().entrySet().stream()
-                    .map(Arguments::of);
+        ) throws JsonParticleInstantiationException {
+            return buildArgs(context, JsonParticleParserTest::getParseInvalidTargets);
         }
     }
 
@@ -119,6 +139,10 @@ public abstract class JsonParticleParserTest {
     @ArgumentsSource(ParseValidTargetsSource.class)
     void parse_success(final Map.Entry<String, JsonParticle> validTarget)
             throws JsonParsingResult.JsonParsingResultNoSuchElementException {
+        if (validTarget == null) {
+            return;
+        }
+
         final JsonParsingResult<?> result = getInstance().parse(validTarget.getKey());
 
         assertThat(result.hasValue())
@@ -132,6 +156,10 @@ public abstract class JsonParticleParserTest {
     @ArgumentsSource(ParseInvalidTargetsSource.class)
     void parse_failure(final Map.Entry<String, JsonParsingResult.JsonParsingResultError> invalidTarget)
             throws JsonParsingResult.JsonParsingResultNoSuchElementException {
+        if (invalidTarget == null) {
+            return;
+        }
+
         final JsonParsingResult<?> result = getInstance().parse(invalidTarget.getKey());
 
         assertThat(result.hasError())
