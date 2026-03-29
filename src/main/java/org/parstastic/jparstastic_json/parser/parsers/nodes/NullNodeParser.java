@@ -18,7 +18,7 @@ public class NullNodeParser extends JsonNodeParser<NullNode> {
     @Override
     protected JsonParsingStep getStep() {
         return new BlockStep(
-                createValidation().toArray(new JsonParsingStep[NullNode.STRING_VALUE.length()])
+                createValidation()
         );
     }
 
