@@ -3,6 +3,7 @@ package org.parstastic.jparstastic_json.parser.steps;
 import org.parstastic.jparstastic_json.parser.JsonParsingProcess;
 import org.parstastic.jparstastic_json.parser.JsonParsingResult;
 
+import java.util.List;
 import java.util.Optional;
 
 public class BlockStep extends JsonParsingStep {
@@ -11,6 +12,10 @@ public class BlockStep extends JsonParsingStep {
     public BlockStep(final JsonParsingStep... instructions) {
         super();
         this.instructions = instructions;
+    }
+
+    public BlockStep(final List<? extends JsonParsingStep> instructions) {
+        this(instructions.toArray(new JsonParsingStep[0]));
     }
 
     @Override
