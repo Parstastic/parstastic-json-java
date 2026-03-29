@@ -37,6 +37,18 @@ class ObjectNodeParserTest extends JsonParticleParserTest {
                                 )
                         )
                 )),
+                "{ \"hello\" : \"world\" }", new ObjectNode(List.of(
+                        new ObjectNode.ObjectNodeProperty(
+                                new Whitespace(" "),
+                                new StringNode("hello"),
+                                new Whitespace(" "),
+                                new JsonValue(
+                                        new Whitespace(" "),
+                                        new StringNode("world"),
+                                        new Whitespace(" ")
+                                )
+                        )
+                )),
                 "{\"key\": \"value\", \"boolean\": true}", new ObjectNode(List.of(
                         new ObjectNode.ObjectNodeProperty(
                                 new Whitespace(""),
