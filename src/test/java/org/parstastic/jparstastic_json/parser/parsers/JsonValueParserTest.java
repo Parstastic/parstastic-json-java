@@ -20,7 +20,18 @@ public class JsonValueParserTest extends JsonParticleParserTest {
 
     @Override
     protected Map<String, JsonParticle> getValidTargets() throws JsonParticleInstantiationException {
-        return mergeMaps(getSingleValidTargets(), getDuplicateValidTargets());
+        return mergeMaps(
+                getSingleValidTargets(),
+                getDuplicateValidTargets().entrySet().stream()
+                        .map(e -> new AbstractMap.SimpleEntry<>(
+                                e.getKey(),
+                                e.getValue().getKey()
+                        ))
+                        .collect(Collectors.toMap(
+                                Map.Entry::getKey,
+                                Map.Entry::getValue
+                        ))
+        );
     }
 
     protected Map<String, JsonParticle> getSingleValidTargets() throws JsonParticleInstantiationException {
@@ -32,11 +43,14 @@ public class JsonValueParserTest extends JsonParticleParserTest {
         );
     }
 
-    protected Map<String, JsonParticle> getDuplicateValidTargets() throws JsonParticleInstantiationException {
+    protected Map<String, Map.Entry<JsonParticle, Integer>> getDuplicateValidTargets() throws JsonParticleInstantiationException {
         return getSingleValidTargets().entrySet().stream()
                 .map(e -> new AbstractMap.SimpleEntry<>(
                         e.getKey() + e.getKey().trim(),
-                        e.getValue()
+                        new AbstractMap.SimpleEntry<>(
+                                e.getValue(),
+                                e.getKey().length()
+                        )
                 ))
                 .collect(Collectors.toMap(
                         Map.Entry::getKey,
