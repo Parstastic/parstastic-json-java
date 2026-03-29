@@ -30,6 +30,10 @@ class ArrayNodeParserTest extends JsonParticleParserTest {
                         new JsonValue(new Whitespace(""), new StringNode("hello"), new Whitespace("")),
                         new JsonValue(new Whitespace(""), new StringNode("world"), new Whitespace(""))
                 )),
+                "[ \"hello\" , \"world\" ]", new ArrayNode(List.of(
+                        new JsonValue(new Whitespace(" "), new StringNode("hello"), new Whitespace(" ")),
+                        new JsonValue(new Whitespace(" "), new StringNode("world"), new Whitespace(" "))
+                )),
                 "[\"string\", true, null, []]", new ArrayNode(List.of(
                         new JsonValue(new Whitespace(""), new StringNode("string"), new Whitespace("")),
                         new JsonValue(new Whitespace(" "), BooleanNode.TRUE, new Whitespace("")),
