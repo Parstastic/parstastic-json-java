@@ -41,7 +41,7 @@ public class NumberNode extends JsonNode {
     /**
      * Numeric value of the <code>JSON</code> number node
      */
-    private final Number value;
+    private final Number base;
     private final boolean hasExponent;
     private final boolean isExponentCapitalized;
     private final NumberNodeExponentSignSymbol exponentSign;
@@ -56,15 +56,15 @@ public class NumberNode extends JsonNode {
         this(value, false, false, null, 1);
     }
 
-    public NumberNode(final Number value,
+    public NumberNode(final Number base,
                       final boolean isExponentCapitalized,
                       final NumberNodeExponentSignSymbol exponentSign,
                       final long exponent)
             throws JsonParticleInstantiationException {
-        this(value, true, isExponentCapitalized, exponentSign, exponent);
+        this(base, true, isExponentCapitalized, exponentSign, exponent);
     }
 
-    private NumberNode(final Number value,
+    private NumberNode(final Number base,
                        final boolean hasExponent,
                        final boolean isExponentCapitalized,
                        final NumberNodeExponentSignSymbol exponentSign,
@@ -72,7 +72,7 @@ public class NumberNode extends JsonNode {
             throws JsonParticleInstantiationException {
         super();
 
-        validateNotNullOrThrowInstantiationException(value, "value");
+        validateNotNullOrThrowInstantiationException(base, "value");
 
         if (exponent < 0) {
             throwInstantiationException("Exponent may not be negative.");
@@ -82,7 +82,7 @@ public class NumberNode extends JsonNode {
             throwInstantiationException("If an exponent is present, \"exponentSign\" may not be null.");
         }
 
-        this.value = value;
+        this.base = base;
         this.hasExponent = hasExponent;
         this.isExponentCapitalized = isExponentCapitalized;
         this.exponentSign = exponentSign;
@@ -93,7 +93,7 @@ public class NumberNode extends JsonNode {
     public String stringify(final StringifyOptions options) {
         final StringBuilder stringBuilder = new StringBuilder();
 
-        stringBuilder.append(this.value.toString());
+        stringBuilder.append(this.base.toString());
 
         if (this.hasExponent) {
             if (this.isExponentCapitalized) {
@@ -112,9 +112,9 @@ public class NumberNode extends JsonNode {
 
     public double getNumericValue() {
         if (this.hasExponent) {
-            return this.value.doubleValue() * Math.pow(10, (double) this.exponentSign.value * this.exponent);
+            return this.base.doubleValue() * Math.pow(10, (double) this.exponentSign.value * this.exponent);
         } else {
-            return this.value.doubleValue();
+            return this.base.doubleValue();
         }
     }
 }
