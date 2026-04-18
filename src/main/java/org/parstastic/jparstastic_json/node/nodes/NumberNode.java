@@ -112,7 +112,7 @@ public class NumberNode extends JsonNode {
 
     public double getNumericValue() {
         if (this.hasExponent) {
-            return Math.pow(this.value.doubleValue(), (double) this.exponentSign.value * this.exponent);
+            return this.value.doubleValue() * Math.pow(10, (double) this.exponentSign.value * this.exponent);
         } else {
             return this.value.doubleValue();
         }
