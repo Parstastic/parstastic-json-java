@@ -6,13 +6,13 @@ import org.parstastic.jparstastic_json.parser.JsonParsingProcess;
 import org.parstastic.jparstastic_json.parser.steps.*;
 
 import java.util.AbstractMap;
-import java.util.Arrays;
 import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class BooleanNodeParser extends JsonNodeParser<BooleanNode> {
-    private BooleanNode.BooleanValue value;
+    private Boolean value;
 
     public BooleanNodeParser() {
         super();
@@ -20,8 +20,12 @@ public class BooleanNodeParser extends JsonNodeParser<BooleanNode> {
 
     @Override
     public boolean canParse(final JsonParsingProcess parsingProcess) {
-        return Arrays.stream(BooleanNode.BooleanValue.values())
+        return createValueStream()
                 .anyMatch(v -> parsingProcess.startsWith(v.toString()));
+    }
+
+    private Stream<Boolean> createValueStream() {
+        return Stream.of(Boolean.TRUE, Boolean.FALSE);
     }
 
     @Override
@@ -32,12 +36,12 @@ public class BooleanNodeParser extends JsonNodeParser<BooleanNode> {
     }
 
     private Map<JsonParsingStep, Predicate<JsonParsingProcess>> createParsersMap() {
-        return Arrays.stream(BooleanNode.BooleanValue.values())
+        return createValueStream()
                 .map(this::createEntry)
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
-    private Map.Entry<JsonParsingStep, Predicate<JsonParsingProcess>> createEntry(final BooleanNode.BooleanValue b) {
+    private Map.Entry<JsonParsingStep, Predicate<JsonParsingProcess>> createEntry(final Boolean b) {
         final String stringValue = b.toString();
         return new AbstractMap.SimpleEntry<>(
                 new BlockStep(
