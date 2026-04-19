@@ -41,8 +41,8 @@ public abstract class ContainerNodeParser<P extends JsonParticle, J extends Cont
                 new WhitespaceParser(),
                 w -> new OrStep(
                         Map.of(
-                                createElementsParser(w),
-                                p -> !p.isAtChar(getEndDelimiter())
+                                p -> !p.isAtChar(getEndDelimiter()),
+                                createElementsParser(w)
                         ),
                         new ExportStep(() -> {
                             this.whitespace = w;

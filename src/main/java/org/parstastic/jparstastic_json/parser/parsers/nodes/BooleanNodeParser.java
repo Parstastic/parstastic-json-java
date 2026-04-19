@@ -35,15 +35,16 @@ public class BooleanNodeParser extends JsonNodeParser<BooleanNode> {
         );
     }
 
-    private Map<JsonParsingStep, Predicate<JsonParsingProcess>> createParsersMap() {
+    private Map<Predicate<JsonParsingProcess>, JsonParsingStep> createParsersMap() {
         return createValueStream()
                 .map(this::createEntry)
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
-    private Map.Entry<JsonParsingStep, Predicate<JsonParsingProcess>> createEntry(final Boolean b) {
+    private Map.Entry<Predicate<JsonParsingProcess>, JsonParsingStep> createEntry(final Boolean b) {
         final String stringValue = b.toString();
         return new AbstractMap.SimpleEntry<>(
+                p -> p.startsWith(stringValue),
                 new BlockStep(
                         new ForLoopStep(
                                 new ParseCharacterStep(c -> true),
@@ -53,8 +54,7 @@ public class BooleanNodeParser extends JsonNodeParser<BooleanNode> {
                             this.value = b;
                             return true;
                         })
-                ),
-                p -> p.startsWith(stringValue)
+                )
         );
     }
 

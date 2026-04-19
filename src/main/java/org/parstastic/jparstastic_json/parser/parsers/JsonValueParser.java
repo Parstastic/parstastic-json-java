@@ -57,7 +57,7 @@ public class JsonValueParser extends JsonParticleParser<JsonValue> {
         );
     }
 
-    private Map<JsonParsingStep, Predicate<JsonParsingProcess>> createParsersMap() {
+    private Map<Predicate<JsonParsingProcess>, JsonParsingStep> createParsersMap() {
         return createNodeParsers().stream()
                 .map(this::createParserEntry)
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
@@ -74,10 +74,10 @@ public class JsonValueParser extends JsonParticleParser<JsonValue> {
         );
     }
 
-    private Map.Entry<JsonParsingStep, Predicate<JsonParsingProcess>> createParserEntry(final JsonNodeParser<?> parser) {
+    private Map.Entry<Predicate<JsonParsingProcess>, JsonParsingStep> createParserEntry(final JsonNodeParser<?> parser) {
         return new AbstractMap.SimpleEntry<>(
-                createParseStep(parser, v -> this.jsonNode = v),
-                parser::canParse
+                parser::canParse,
+                createParseStep(parser, v -> this.jsonNode = v)
         );
     }
 

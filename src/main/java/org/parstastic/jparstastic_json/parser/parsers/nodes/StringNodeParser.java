@@ -49,11 +49,11 @@ public class StringNodeParser extends JsonNodeParser<StringNode> {
     private JsonParsingStep createCharacterParsingStep() {
         return new OrStep(
                 Map.of(
+                        p -> p.isAtChar('\\'),
                         new BlockStep(
                                 new ParseCharacterStep(this.characters::add),
                                 createEscapeTargetsParsingStep()
-                        ),
-                        p -> p.isAtChar('\\')
+                        )
                 ),
                 new ParseCharacterStep(this.characters::add)
         );
@@ -66,7 +66,7 @@ public class StringNodeParser extends JsonNodeParser<StringNode> {
         );
     }
 
-    private Map<JsonParsingStep, Predicate<JsonParsingProcess>> createEscapeTargetsParserMap() {
+    private Map<Predicate<JsonParsingProcess>, JsonParsingStep> createEscapeTargetsParserMap() {
         return Stream.of(
                         '"',
                         '\\',
@@ -78,8 +78,8 @@ public class StringNodeParser extends JsonNodeParser<StringNode> {
                         't'
                 )
                 .map(c -> new AbstractMap.SimpleEntry<>(
-                        new ParseCharacterStep(this.characters::add),
-                        (Predicate<JsonParsingProcess>) p -> p.isAtChar(c)
+                        (Predicate<JsonParsingProcess>) p -> p.isAtChar(c),
+                        new ParseCharacterStep(this.characters::add)
                 ))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }

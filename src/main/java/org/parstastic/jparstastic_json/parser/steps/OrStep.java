@@ -8,24 +8,24 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 public class OrStep extends JsonParsingStep {
-    public static OrStep elseError(final Map<JsonParsingStep, Predicate<JsonParsingProcess>> ifSteps) {
+    public static OrStep elseError(final Map<Predicate<JsonParsingProcess>, JsonParsingStep> ifSteps) {
         return new OrStep(
                 ifSteps,
                 new ExportStep(() -> false)
         );
     }
 
-    public static OrStep elseSuccess(final Map<JsonParsingStep, Predicate<JsonParsingProcess>> ifSteps) {
+    public static OrStep elseSuccess(final Map<Predicate<JsonParsingProcess>, JsonParsingStep> ifSteps) {
         return new OrStep(
                 ifSteps,
                 new ExportStep(() -> true)
         );
     }
 
-    private final Map<JsonParsingStep, Predicate<JsonParsingProcess>> ifSteps;
+    private final Map<Predicate<JsonParsingProcess>, JsonParsingStep> ifSteps;
     private final JsonParsingStep elseStep;
 
-    public OrStep(final Map<JsonParsingStep, Predicate<JsonParsingProcess>> ifSteps, final JsonParsingStep elseStep) {
+    public OrStep(final Map<Predicate<JsonParsingProcess>, JsonParsingStep> ifSteps, final JsonParsingStep elseStep) {
         super();
         this.ifSteps = ifSteps;
         this.elseStep = elseStep;
@@ -33,9 +33,9 @@ public class OrStep extends JsonParsingStep {
 
     @Override
     public Optional<JsonParsingResult.JsonParsingResultError> execute(final JsonParsingProcess parsingProcess) {
-        for (final Map.Entry<JsonParsingStep, Predicate<JsonParsingProcess>> ifStep : ifSteps.entrySet()) {
-            if (ifStep.getValue().test(new JsonParsingProcess(parsingProcess))) {
-                return ifStep.getKey().execute(parsingProcess);
+        for (final Map.Entry<Predicate<JsonParsingProcess>, JsonParsingStep> ifStep : ifSteps.entrySet()) {
+            if (ifStep.getKey().test(new JsonParsingProcess(parsingProcess))) {
+                return ifStep.getValue().execute(parsingProcess);
             }
         }
         return this.elseStep.execute(parsingProcess);

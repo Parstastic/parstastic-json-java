@@ -45,8 +45,8 @@ public class NumberNodeParser extends JsonNodeParser<NumberNode> {
     private JsonParsingStep createBaseSignParser() {
         return OrStep.elseSuccess(
                 Map.of(
-                        new ParseCharacterStep(this.value::add),
-                        parsingProcess -> parsingProcess.isAtChar(NumberNode.NEGATIVE_NUMBER_PREFIX)
+                        parsingProcess -> parsingProcess.isAtChar(NumberNode.NEGATIVE_NUMBER_PREFIX),
+                        new ParseCharacterStep(this.value::add)
                 )
         );
     }
@@ -54,16 +54,16 @@ public class NumberNodeParser extends JsonNodeParser<NumberNode> {
     private JsonParsingStep createBaseParser() {
         return OrStep.elseError(
                 Map.of(
-                        new ParseCharacterStep(this.value::add),
                         parsingProcess -> parsingProcess.isCharValid(IS_DIGIT_ZERO),
+                        new ParseCharacterStep(this.value::add),
+                        parsingProcess -> parsingProcess.isCharValid(IS_DIGIT_ONE_TO_NINE),
                         new BlockStep(
                                 new ParseCharacterStep(this.value::add),
                                 new WhileLoopStep(
                                         new ParseCharacterStep(this.value::add),
                                         parsingProcess -> parsingProcess.isCharValid(IS_DIGIT)
                                 )
-                        ),
-                        parsingProcess -> parsingProcess.isCharValid(IS_DIGIT_ONE_TO_NINE)
+                        )
                 )
         );
     }
@@ -71,11 +71,11 @@ public class NumberNodeParser extends JsonNodeParser<NumberNode> {
     private JsonParsingStep createFractionParser() {
         return OrStep.elseSuccess(
                 Map.of(
+                        parsingProcess -> parsingProcess.isAtChar(NumberNode.DECIMAL_DELIMITER),
                         new BlockStep(
                                 new ParseCharacterStep(this.value::add),
                                 createWhileLoopWithAtLeastOneIterationParser(this.value)
-                        ),
-                        parsingProcess -> parsingProcess.isAtChar(NumberNode.DECIMAL_DELIMITER)
+                        )
                 )
         );
     }
@@ -94,6 +94,9 @@ public class NumberNodeParser extends JsonNodeParser<NumberNode> {
     private JsonParsingStep createExponentParser() {
         return OrStep.elseSuccess(
                 Map.of(
+                        p -> p.isCharValid(
+                                c -> c == NumberNode.EXPONENT_SYMBOL || c == NumberNode.EXPONENT_SYMBOL_CAPITALIZED
+                        ),
                         new BlockStep(
                                 new ParseCharacterStep(c -> {
                                     this.isExponentCapitalized = Character.isUpperCase(c);
@@ -101,9 +104,6 @@ public class NumberNodeParser extends JsonNodeParser<NumberNode> {
                                 }),
                                 createExponentSignParser(),
                                 createWhileLoopWithAtLeastOneIterationParser(this.exponent)
-                        ),
-                        p -> p.isCharValid(
-                                c -> c == NumberNode.EXPONENT_SYMBOL || c == NumberNode.EXPONENT_SYMBOL_CAPITALIZED
                         )
                 )
         );
@@ -122,15 +122,15 @@ public class NumberNodeParser extends JsonNodeParser<NumberNode> {
         );
     }
 
-    private Map.Entry<JsonParsingStep, Predicate<JsonParsingProcess>> createExponentSignSymbolParserEntry(
+    private Map.Entry<Predicate<JsonParsingProcess>, JsonParsingStep> createExponentSignSymbolParserEntry(
             final NumberNode.NumberNodeExponentSignSymbol exponentSignSymbol
     ) {
         return new AbstractMap.SimpleEntry<>(
+                p -> p.startsWith(exponentSignSymbol.getSymbol()),
                 new ParseCharacterStep(c -> {
                     this.exponentSign = exponentSignSymbol;
                     return true;
-                }),
-                p -> p.startsWith(exponentSignSymbol.getSymbol())
+                })
         );
     }
 
