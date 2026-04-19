@@ -49,7 +49,7 @@ public abstract class ContainerNode<P extends JsonParticle> extends JsonNode {
                         : optionsForThisNode
                         ;
                 stringBuilder.append(this.elements.get(i).stringify(optionsForThisElement));
-                if (i < this.elements.size() - 1) {
+                if (!isLastElement) {
                     stringBuilder.append(getDelimiterElements());
                 }
             }
