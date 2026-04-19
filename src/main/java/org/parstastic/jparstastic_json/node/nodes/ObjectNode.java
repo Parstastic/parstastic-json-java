@@ -45,7 +45,7 @@ public class ObjectNode extends ContainerNode<ObjectNode.ObjectNodeProperty> {
         @Override
         public String stringify(final StringifyOptions options) {
             return options.getObjectNodePropertyLeadingWhitespace(this.leadingWhitespace).stringify(options) +
-                    key +
+                    key.stringify(options) +
                     options.getObjectNodePropertyTrailingWhitespace(this.trailingWhitespace).stringify(options) +
                     KEY_VALUE_DELIMITER +
                     value.stringify(options);
